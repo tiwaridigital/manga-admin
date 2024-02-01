@@ -42,7 +42,7 @@ export default function TableComponent({ data }) {
   const [filterValue, setFilterValue] = React.useState('');
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS),
+    new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [statusFilter, setStatusFilter] = React.useState('all');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -58,7 +58,7 @@ export default function TableComponent({ data }) {
     if (visibleColumns === 'all') return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid),
+      Array.from(visibleColumns).includes(column.uid)
     );
   }, [visibleColumns]);
 
@@ -68,7 +68,7 @@ export default function TableComponent({ data }) {
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
-        user.title.toLowerCase().includes(filterValue.toLowerCase()),
+        user.title.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
@@ -77,7 +77,7 @@ export default function TableComponent({ data }) {
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+        Array.from(statusFilter).includes(user.status)
       );
     }
 
@@ -156,7 +156,7 @@ export default function TableComponent({ data }) {
             >
               Delete
             </Button>
-            <Link href={`/manga/edit/${user.slug}`}>
+            <Link href={`/edit/manga/${user.slug}`} target="_blank">
               <Button
                 size="sm"
                 color="success"

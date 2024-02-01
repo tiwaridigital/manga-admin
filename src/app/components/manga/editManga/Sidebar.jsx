@@ -30,8 +30,8 @@ const Sidebar = ({ manga, styles }) => {
       acceptedFiles.map((file) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
-        }),
-      ),
+        })
+      )
     );
   }, []);
 
@@ -66,7 +66,8 @@ const Sidebar = ({ manga, styles }) => {
       <Link
         isBlock
         showAnchorIcon
-        href="#"
+        href={`/chapters/${manga.id}`}
+        target="_blank"
         color="primary"
         className="text-[20px] font-semibold"
       >

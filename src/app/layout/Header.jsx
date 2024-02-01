@@ -19,6 +19,7 @@ import {
 } from '@nextui-org/react';
 import { AcmeLogo } from '../../../public/AcmeLogo';
 import { SearchIcon } from '../../../public/SearchIcon';
+import client from '../../../client';
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -84,8 +85,9 @@ export default function App() {
             color="warning"
             href="#"
             variant="flat"
+            onClick={async () => client.resetStore()}
           >
-            Sign Up
+            Reset Store
           </Button>
         </NavbarItem>
       </NavbarContent>
@@ -99,8 +101,8 @@ export default function App() {
                 index === 2
                   ? 'warning'
                   : index === menuItems.length - 1
-                    ? 'danger'
-                    : 'foreground'
+                  ? 'danger'
+                  : 'foreground'
               }
               href="#"
               size="lg"

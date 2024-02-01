@@ -66,8 +66,6 @@ const EditManga = ({ manga, styles }) => {
     setForceReRender(!forceReRender);
   };
 
-  console.log('render');
-
   return (
     <div className={`${styles}`}>
       <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
