@@ -2,16 +2,19 @@ import Layout from '@/app/layout/Layout';
 import EditManga from '@/app/components/manga/editManga/EditManga';
 import ContentWrapper from '@/app/components/ContentWrapper';
 import fetchSingleManga from '@/lib/fetchSingleManga';
+import Sidebar from '@/app/components/manga/editManga/Sidebar';
+import { unstable_noStore as noStore } from 'next/cache';
 
 const Page = async ({ params }) => {
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
+  noStore();
   const manga = await fetchSingleManga(params.slug);
-  console.log('singlemanga', manga);
+
   return (
     <Layout>
       <ContentWrapper>
-        <div className="flex justify-center max-w-[700px] mx-auto">
-          <EditManga manga={manga[0]} />
+        <div className="flex flex-col sm:flex-row justify-center max-w-[1024px] mx-auto gap-6">
+          <EditManga manga={manga[0]} styles={'w-full sm:w-[70%]'} />
+          <Sidebar manga={manga[0]} styles={'w-full sm:w-[30%]'} />
         </div>
       </ContentWrapper>
     </Layout>
