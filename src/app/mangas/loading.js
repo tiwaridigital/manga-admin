@@ -1,7 +1,11 @@
 import Loader from '@/app/components/loader/Loader';
 
 const Loading = () => {
-  return <Loader />;
+  return (
+    <>
+      <Loader />
+    </>
+  );
 };
 
 export default Loading;
