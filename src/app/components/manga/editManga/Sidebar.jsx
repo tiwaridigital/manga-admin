@@ -11,17 +11,56 @@ import {
   Snippet,
   useDisclosure,
   Link,
+  Chip,
+  Input,
+  Checkbox,
 } from '@nextui-org/react';
 import { dateFormatter } from '@/utils/dateFormatter';
 import NextImage from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
 import { FaRegEdit } from 'react-icons/fa';
+import { IoIosAddCircle } from 'react-icons/io';
+import { LiaEditSolid } from 'react-icons/lia';
 import { useDropzone } from 'react-dropzone';
+import gql from 'graphql-tag';
+import client from '../../../../../client';
+import { ToastContainer, toast, cssTransition } from 'react-toastify';
+import 'animate.css/animate.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { IoCloseSharp } from 'react-icons/io5';
 
 const Sidebar = ({ manga, styles }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isGenreModalOpen,
+    onOpen: onGenreModalOpen,
+    onOpenChange: onGenreModalOpenChange,
+  } = useDisclosure();
   const [files, setFiles] = useState([]);
   const [changeImage, setChangeImage] = useState(false);
+  const [genres, setGenres] = useState(manga.genres);
+  const [inputGenreValue, setInputGenreValue] = useState('');
+  const [isGenreUpdateLoading, setIsGenreUpdateLoading] = useState(false);
+
+  const toastFun = (msg) => {
+    const bounce = cssTransition({
+      enter: 'animate__animated animate__bounceIn',
+      exit: 'animate__animated animate__bounceOut',
+    });
+
+    toast.success(msg, {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+      transition: bounce,
+      closeButton: <IoCloseSharp size={24} />,
+    });
+  };
 
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files
@@ -43,6 +82,42 @@ const Sidebar = ({ manga, styles }) => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
   }, []);
+
+  const handleGenresClose = (genreToRemove) => {
+    setGenres(genres.filter((genre) => genre !== genreToRemove));
+    if (genres.length === 1) {
+      setGenres(manga.genres);
+    }
+  };
+
+  const handleGenreUpdate = async () => {
+    setIsGenreUpdateLoading(true);
+    const genreMutation = gql`
+      mutation updateGenre($mangaId: uuid!, $genres: jsonb) {
+        update_singleMang_by_pk(
+          pk_columns: { id: $mangaId }
+          _set: { genres: $genres }
+        ) {
+          title
+          genres
+        }
+      }
+    `;
+
+    const result = await client.mutate({
+      mutation: genreMutation,
+      variables: {
+        mangaId: manga.id,
+        genres,
+      },
+    });
+
+    console.log('genre result', result);
+    setIsGenreUpdateLoading(false);
+    toastFun('Genres Successfully Updated');
+  };
+
+  console.log('genres', genres);
 
   return (
     <div
@@ -90,7 +165,7 @@ const Sidebar = ({ manga, styles }) => {
       <ImageModal isOpen={isOpen} onOpenChange={onOpenChange} manga={manga} />
       <Button
         color="secondary"
-        variant="flat"
+        variant="shadow"
         startContent={<FaRegEdit />}
         className="mb-2 mx-2 w-[95%]"
         onClick={() => setChangeImage(!changeImage)}
@@ -117,6 +192,58 @@ const Sidebar = ({ manga, styles }) => {
           ))}
         </>
       )}
+
+      {/*Genres*/}
+      <div className="px-2 w-full">
+        <div className="flex justify-between items-center py-2">
+          <p className="text-[20px] leading-[1px] mt-6 mb-8">Genres</p>
+          <Chip
+            variant="shadow"
+            color="success"
+            classNames={{
+              base: 'cursor-pointer',
+              content: 'text-white',
+            }}
+            startContent={<IoIosAddCircle size={18} color="#e2e8f0" />}
+            size="lg"
+            onClick={onGenreModalOpen}
+          >
+            Add Genre
+          </Chip>
+          <AddGenreModal
+            isOpen={isGenreModalOpen}
+            onOpenChange={onGenreModalOpenChange}
+            inputGenreValue={inputGenreValue}
+            setInputGenreValue={setInputGenreValue}
+            genres={genres}
+            setGenres={setGenres}
+          />
+        </div>
+        <div className="flex flex-wrap gap-4 mb-6">
+          {genres.map((x, idx) => (
+            <Chip
+              key={idx}
+              onClose={() => handleGenresClose(x)}
+              variant="dot"
+              color="warning"
+            >
+              {x}
+            </Chip>
+          ))}
+        </div>
+        <Button
+          variant="shadow"
+          color="success"
+          className="text-white"
+          fullWidth
+          onClick={handleGenreUpdate}
+          endContent={<LiaEditSolid size={20} />}
+          isLoading={isGenreUpdateLoading}
+        >
+          Update Genre
+        </Button>
+      </div>
+      {/*Genres*/}
     </div>
   );
 };
@@ -186,5 +313,50 @@ export const ImagePreview = ({ file }) => {
         />
       </div>
     </div>
+  );
+};
+
+export const AddGenreModal = ({
+  isOpen,
+  onOpenChange,
+  inputGenreValue,
+  setInputGenreValue,
+  genres,
+  setGenres,
+}) => {
+  console.log('AddGenreModal');
+  return (
+    <Modal
+      backdrop="blur"
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      placement="top-center"
+    >
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col gap-1">Add Genre</ModalHeader>
+            <ModalBody>
+              <Input
+                autoFocus
+                placeholder="Enter Genre Name"
+                onChange={(e) => setInputGenreValue(e.target.value)}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="warning"
+                variant="faded"
+                onPress={onClose}
+                onClick={() => setGenres([...genres, inputGenreValue])}
+                endContent={<IoIosAddCircle size={24} />}
+              >
+                Add {inputGenreValue}
+              </Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
   );
 };
