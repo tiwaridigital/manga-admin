@@ -1,0 +1,10 @@
+query SingleChapterQuery($slug: String!) {
+  chapters(where: { slug: { _eq: $slug } }) {
+    hasNextEp
+    data
+    slug
+    title
+    totalEpisodes
+    url
+  }
+}

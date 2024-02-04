@@ -5,19 +5,20 @@ import { Listbox, ListboxItem } from '@nextui-org/react';
 import { PlayCircleIcon } from '../../../../public/icons/PlayCircleIcon';
 import { ChevronRightIcon } from '../../../../public/icons/ChevronRightIcon';
 
-const Chapters = ({ chapters }) => {
+const ChaptersList = ({ chapters }) => {
   console.log('chapters', chapters);
   const titleArr = chapters[0].slug.split('-');
   const title = titleArr.slice(0, titleArr.length - 2).join(' ');
   console.log('title', title);
+
   return (
     <div className="flex flex-col items-center my-4">
       <h1 className="capitalize text-[30px] text-red-300 font-bold mb-6">
-        {title}
+        {title} - {chapters[0].totalEpisodes}
       </h1>
       <Listbox
         aria-label="User Menu"
-        onAction={(key) => alert(key)}
+        // onAction={(key) => alert(key)}
         className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 max-w-[604px] overflow-visible shadow-small rounded-medium"
         itemClasses={{
           base: 'px-3 first:rounded-t-medium last:rounded-b-medium rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80',
@@ -33,6 +34,8 @@ const Chapters = ({ chapters }) => {
               </IconWrapper>
             }
             className="w-full"
+            href={`/edit/chapter/${chapter.slug}`}
+            target="_blank"
           >
             {`${chapter.title}`}
           </ListboxItem>
@@ -42,7 +45,7 @@ const Chapters = ({ chapters }) => {
   );
 };
 
-export default Chapters;
+export default ChaptersList;
 
 export const IconWrapper = ({ children, className }) => (
   <div

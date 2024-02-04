@@ -120,6 +120,13 @@ const EditManga = ({ manga, styles }) => {
             labelPlacement="outside"
             {...register('alternativeName')}
           />
+          <Input
+            size="md"
+            label="Cover Image"
+            defaultValue={manga.coverImage}
+            labelPlacement="outside"
+            {...register('coverImage')}
+          />
 
           <div className="flex gap-4">
             <Input

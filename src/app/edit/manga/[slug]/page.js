@@ -14,7 +14,7 @@ const Page = async ({ params }) => {
       <ContentWrapper>
         <div className="flex flex-col sm:flex-row justify-center max-w-[1024px] mx-auto gap-6">
           <EditManga manga={manga[0]} styles={'w-full sm:w-[70%]'} />
-          <Sidebar manga={manga[0]} styles={'w-full sm:w-[30%]'} />
+          <Sidebar manga={manga[0]} styles={'w-full sm:w-[35%]'} />
         </div>
       </ContentWrapper>
     </Layout>
