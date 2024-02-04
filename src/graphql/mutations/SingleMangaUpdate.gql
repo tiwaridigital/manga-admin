@@ -1,42 +1,46 @@
-mutation SingleMangaMutation (
-    $alternativeName: String,
-    $artist: String,
-    $author: String,
-    $chapters: jsonb,
-    $coverImage: String,
-    $updatedAt: timestamptz,
-    $dates: jsonb,
-    $description: String,
-    $genres: jsonb,
-    $id: uuid,
-    $rating: String,
-    $slug: String!,
-    $src: String,
-    $status: String,
-    $title: String,
+mutation SingleMangaMutation(
+  $alternativeName: String
+  $artist: String
+  $author: String
+  $chapters: jsonb
+  $coverImage: String
+  $updatedAt: timestamptz
+  $dates: jsonb
+  $description: String
+  $genres: jsonb
+  $id: uuid
+  $rating: String
+  $slug: String!
+  $src: String
+  $status: String
+  $title: String
 ) {
-    update_singleMang(where: {slug: {_eq: $slug}},
-        _set: {
-            alternativeName: $alternativeName,
-            artist: $artist,
-            author: $author,
-            updatedAt: $updatedAt,
-            description: $description,
-            rating: $rating,
-            slug: $slug,
-            status: $status,
-            title: $title,
-        }) {
-        returning {
-            alternativeName
-            artist
-            author
-            updatedAt
-            description
-            rating
-            slug
-            status
-            title
-        }
+  update_singleMang(
+    where: { slug: { _eq: $slug } }
+    _set: {
+      alternativeName: $alternativeName
+      artist: $artist
+      author: $author
+      updatedAt: $updatedAt
+      description: $description
+      rating: $rating
+      slug: $slug
+      status: $status
+      title: $title
+      coverImage: $coverImage
     }
+  ) {
+    returning {
+      alternativeName
+      artist
+      author
+      updatedAt
+      description
+      rating
+      slug
+      status
+      title
+      coverImage
+    }
+  }
 }

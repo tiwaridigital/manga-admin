@@ -2,7 +2,7 @@ import SINGLE_CHAPTER_QUERY from '@/graphql/queries/SingleChapterQuery.gql';
 import client from '../../client';
 
 const fetchSingleChapter = async (slug) => {
-  console.log('mangaId', mangaId);
+  console.log('mangaId', slug);
   try {
     const result = await client.query({
       query: SINGLE_CHAPTER_QUERY,
@@ -10,7 +10,7 @@ const fetchSingleChapter = async (slug) => {
         slug,
       },
     });
-    return result.data;
+    return result.data.chapters;
   } catch (err) {
     console.log('Error Fetching Manga Chapters: ', err);
   }
