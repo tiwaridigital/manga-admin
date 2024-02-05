@@ -8,8 +8,8 @@ const fetchSingleManga = async (slug) => {
     const result = await client.query({
       query: Single_MANGA_QUERY,
       variables: {
-        slug,
-      },
+        slug
+      }
     });
     return result.data.singleMang;
   } catch (err) {

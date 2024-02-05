@@ -28,8 +28,9 @@ import { ToastContainer, toast, cssTransition } from 'react-toastify';
 import 'animate.css/animate.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoCloseSharp } from 'react-icons/io5';
+import { BsArrowRight } from 'react-icons/bs';
 
-const Sidebar = ({ manga, styles }) => {
+const MangaEditSidebar = ({ manga, styles }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const {
     isOpen: isGenreModalOpen,
@@ -137,21 +138,38 @@ const Sidebar = ({ manga, styles }) => {
           {`Created: ${dateFormatter(manga.createdAt)}`}
         </Snippet>
       </div>
-      {/*Chapters*/}
-      <Link
-        isBlock
-        showAnchorIcon
-        href={`/chapters/${manga.id}`}
-        target="_blank"
-        color="primary"
-        className="text-[20px] font-semibold"
-      >
-        Chapters - Edit Chapters
-      </Link>
-      <h1 className="text-[50px] text-red-300 font-bold tracking-tight inline from-[#f89e00] to-[#da2f68] bg-clip-text text-transparent bg-gradient-to-b">
-        {manga.chapters.length}
-      </h1>
-      {/*Chapters*/}
+
+      <div className="px-4 flex flex-col items-center">
+        {/*Chapters*/}
+        <Link
+          isBlock
+          showAnchorIcon
+          href={`/chapters/${manga.id}`}
+          target="_blank"
+          color="primary"
+          className="text-[20px] font-semibold"
+        >
+          Chapters - Edit Chapters
+        </Link>
+        <h1 className="text-[50px] text-red-300 font-bold tracking-tight inline from-[#f89e00] to-[#da2f68] bg-clip-text text-transparent bg-gradient-to-b">
+          {`Total: ${manga.chapters.length}`}
+        </h1>
+        <h1 className="text-[50px] mb-4 text-red-300 font-bold tracking-tight inline from-[#f89e00] to-[#da2f68] bg-clip-text text-transparent bg-gradient-to-b">
+          {`Completed: ${manga.completedChapters}`}
+        </h1>
+
+        <Button
+          variant="solid"
+          color="secondary"
+          radius="full"
+          endContent={<BsArrowRight />}
+          fullWidth
+          className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg mb-8"
+        >
+          Complete Chapters
+        </Button>
+        {/*Chapters*/}
+      </div>
 
       <Image
         as={NextImage}
@@ -164,10 +182,10 @@ const Sidebar = ({ manga, styles }) => {
       />
       <ImageModal isOpen={isOpen} onOpenChange={onOpenChange} manga={manga} />
       <Button
-        color="secondary"
         variant="shadow"
+        radius="full"
         startContent={<FaRegEdit />}
-        className="mb-2 mx-2 w-[95%]"
+        className="mb-2 mx-2 w-[95%] bg-gradient-to-r from-amber-500 to-pink-500 text-white"
         onClick={() => setChangeImage(!changeImage)}
       >
         Change Image
@@ -199,10 +217,9 @@ const Sidebar = ({ manga, styles }) => {
           <p className="text-[20px] leading-[1px] mt-6 mb-8">Genres</p>
           <Chip
             variant="shadow"
-            color="success"
             classNames={{
-              base: 'cursor-pointer',
-              content: 'text-white',
+              base: 'cursor-pointer bg-gradient-to-r from-amber-500 to-pink-500',
+              content: 'text-white text-[14px]',
             }}
             startContent={<IoIosAddCircle size={18} color="#e2e8f0" />}
             size="lg"
@@ -233,8 +250,8 @@ const Sidebar = ({ manga, styles }) => {
         </div>
         <Button
           variant="shadow"
-          color="success"
-          className="text-white"
+          radius="full"
+          className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg"
           fullWidth
           onClick={handleGenreUpdate}
           endContent={<LiaEditSolid size={20} />}
@@ -248,7 +265,7 @@ const Sidebar = ({ manga, styles }) => {
   );
 };
 
-export default Sidebar;
+export default MangaEditSidebar;
 
 export const ImageModal = ({ isOpen, onOpenChange, manga }) => {
   return (

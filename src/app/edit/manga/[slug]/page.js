@@ -24,5 +24,5 @@ const Page = async ({ params }) => {
 export default Page;
 
 export const metadata = {
-  title: 'Edit Manga',
+  title: 'Edit Manga'
 };

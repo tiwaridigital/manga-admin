@@ -5,8 +5,9 @@ import {
   Chip,
   Divider,
   Input,
+  Link,
   Snippet,
-  Textarea
+  Textarea,
 } from '@nextui-org/react';
 import { useState } from 'react';
 import { FcRatings } from 'react-icons/fc';
@@ -19,18 +20,19 @@ import 'animate.css/animate.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoCloseSharp } from 'react-icons/io5';
 import gql from 'graphql-tag';
+import { BsArrowRight } from 'react-icons/bs';
 
-const EditManga = ({ manga, styles }) => {
+const MangaEdit = ({ manga, styles }) => {
   console.log('manga', manga);
   const [isLoading, setIsLoading] = useState(false);
-  const [genres, setGenres] = useState(manga.genres);
+  const [genres, setGenres] = useState(manga?.genres);
   const [forceReRender, setForceReRender] = useState(false);
 
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -45,7 +47,7 @@ const EditManga = ({ manga, styles }) => {
       title,
       artist,
       author,
-      coverImage
+      coverImage,
     } = data;
     const result = await client.mutate({
       mutation: SINGLE_MANGA_MUTATION,
@@ -56,11 +58,11 @@ const EditManga = ({ manga, styles }) => {
         author,
         updatedAt: getCurrentISTTimestamp(),
         description,
-        rating: manga.rating,
+        rating: manga?.rating,
         status,
         title,
-        coverImage
-      }
+        coverImage,
+      },
     });
 
     console.log('result', result);
@@ -75,42 +77,42 @@ const EditManga = ({ manga, styles }) => {
       progress: undefined,
       theme: 'light',
       transition: bounce,
-      closeButton: <IoCloseSharp size={24} />
+      closeButton: <IoCloseSharp size={24} />,
     });
     setForceReRender(!forceReRender);
   };
 
   const bounce = cssTransition({
     enter: 'animate__animated animate__bounceIn',
-    exit: 'animate__animated animate__bounceOut'
+    exit: 'animate__animated animate__bounceOut',
   });
 
   const handleGenresClose = (genreToRemove) => {
     setGenres(genres.filter((genre) => genre !== genreToRemove));
     if (genres.length === 1) {
-      setGenres(manga.genres);
+      setGenres(manga?.genres);
     }
   };
 
   const handleGenreUpdate = async () => {
     const genreMutation = gql`
-        mutation updateGenre($mangaId: uuid!, $genres: jsonb) {
-            update_singleMang_by_pk(
-                pk_columns: { id: $mangaId }
-                _set: { genres: $genres }
-            ) {
-                title
-                genres
-            }
+      mutation updateGenre($mangaId: uuid!, $genres: jsonb) {
+        update_singleMang_by_pk(
+          pk_columns: { id: $mangaId }
+          _set: { genres: $genres }
+        ) {
+          title
+          genres
         }
+      }
     `;
 
     const result = await client.mutate({
       mutation: genreMutation,
       variables: {
-        mangaId: manga.id,
-        genres
-      }
+        mangaId: manga?.id,
+        genres,
+      },
     });
 
     console.log('genre result', result);
@@ -125,16 +127,16 @@ const EditManga = ({ manga, styles }) => {
         <Snippet
           classNames={{
             base: 'p-2 w-full rounded-lg mt-2 bg-white',
-            pre: 'text-[20px] sm:text-[30px] pb-[10px] font-sans font-bold tracking-tight inline from-[#f89e00] to-[#da2f68] bg-clip-text text-transparent bg-gradient-to-b'
+            pre: 'text-[20px] sm:text-[30px] pb-[10px] font-sans font-bold tracking-tight inline from-[#f89e00] to-[#da2f68] bg-clip-text text-transparent bg-gradient-to-b',
           }}
           hideSymbol
         >
-          {manga.title}
+          {`Sanity: ${manga?.title}`}
         </Snippet>
 
         <Badge
           color="danger"
-          content={manga.rating}
+          content={manga?.rating}
           isInvisible={false}
           shape="circle"
         >
@@ -147,21 +149,21 @@ const EditManga = ({ manga, styles }) => {
           <Input
             size="md"
             label="Title"
-            defaultValue={manga.title}
+            defaultValue={manga?.title}
             labelPlacement="outside"
             {...register('title')}
           />
           <Input
             size="md"
             label="ID"
-            defaultValue={manga.id}
+            defaultValue={manga?._id}
             labelPlacement="outside"
             {...register('id')}
           />
           <Input
             size="md"
             label="Slug"
-            defaultValue={manga.slug}
+            defaultValue={manga?.slug}
             labelPlacement="outside"
             {...register('slug')}
           />
@@ -170,10 +172,10 @@ const EditManga = ({ manga, styles }) => {
             size="md"
             label="Alternative Title"
             defaultValue={
-              manga.alternativeName.length > 0 ? manga.alternativeName : ''
+              manga?.alternativeName?.length > 0 ? manga?.alternativeName : ''
             }
             placeholder={
-              manga.alternativeName.length === 0
+              manga?.alternativeName?.length === 0
                 ? 'No Alternative Name Defined'
                 : ''
             }
@@ -183,7 +185,7 @@ const EditManga = ({ manga, styles }) => {
           <Input
             size="md"
             label="Cover Image"
-            defaultValue={manga.coverImage}
+            defaultValue={manga?.coverImage}
             labelPlacement="outside"
             {...register('coverImage')}
           />
@@ -192,14 +194,14 @@ const EditManga = ({ manga, styles }) => {
             <Input
               size="md"
               label="Author"
-              defaultValue={manga.author}
+              defaultValue={manga?.author}
               labelPlacement="outside"
               {...register('author')}
             />
             <Input
               size="md"
               label="Artist"
-              defaultValue={manga.artist}
+              defaultValue={manga?.artist}
               labelPlacement="outside"
               {...register('artist')}
             />
@@ -209,7 +211,7 @@ const EditManga = ({ manga, styles }) => {
             <Input
               size="md"
               label="Manga Status"
-              defaultValue={manga.status}
+              defaultValue={manga?.status}
               labelPlacement="outside"
               {...register('status')}
             />
@@ -217,7 +219,7 @@ const EditManga = ({ manga, styles }) => {
             <Input
               size="md"
               label="Rating"
-              defaultValue={manga.rating}
+              defaultValue={manga?.rating}
               labelPlacement="outside"
               {...register('rating')}
             />
@@ -227,7 +229,7 @@ const EditManga = ({ manga, styles }) => {
             <Input
               size="md"
               label="Manga Updated Date"
-              defaultValue={manga.dates.uploadedDate}
+              defaultValue={manga?.dates?.uploadedDate}
               labelPlacement="outside"
               {...register('manga-uploadedDate')}
             />
@@ -235,8 +237,8 @@ const EditManga = ({ manga, styles }) => {
               size="md"
               labelPlacement="outside"
               label="Manga Uploaded Date"
-              defaultValue={manga.dates.updatedDate}
-              {...register('manga.updatedDate')}
+              defaultValue={manga?.dates?.updatedDate}
+              {...register('manga?.updatedDate')}
             />
           </div>
 
@@ -244,19 +246,20 @@ const EditManga = ({ manga, styles }) => {
             label="Description"
             labelPlacement="outside"
             placeholder="Enter your description (Default autosize)"
-            defaultValue={manga.description}
+            defaultValue={manga?.description}
             {...register('description')}
           />
         </div>
         <Button
-          color="primary"
           variant="shadow"
-          className="mt-6"
+          className="mt-6 bg-gradient-to-r from-[#11998e] to-[#38ef7d] text-white"
           isLoading={isLoading}
           fullWidth
+          radius="full"
           size="lg"
           type="submit"
           onSubmit={handleSubmit}
+          endContent={<BsArrowRight size={24} />}
         >
           Submit
         </Button>
@@ -265,4 +268,4 @@ const EditManga = ({ manga, styles }) => {
   );
 };
 
-export default EditManga;
+export default MangaEdit;
