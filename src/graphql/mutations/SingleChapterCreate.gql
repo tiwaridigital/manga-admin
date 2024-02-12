@@ -1,0 +1,10 @@
+mutation SingleChapterCreate($slug: String, $title: String, $url: uuid, $data: jsonb, $hasNextEp: Boolean, $totalEpisodes: Int) {
+    insert_chapters_one(object: { slug: $slug, title: $title, url: $url, data: $data, hasNextEp: $hasNextEp, totalEpisodes: $totalEpisodes }) {
+        slug
+        title
+        url
+        data
+        hasNextEp
+        totalEpisodes
+    }
+}

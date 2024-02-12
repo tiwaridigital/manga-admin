@@ -9,7 +9,7 @@ import {
   Snippet,
   Textarea,
 } from '@nextui-org/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FcRatings } from 'react-icons/fc';
 import { useForm } from 'react-hook-form';
 import client from '../../../../../client';
@@ -21,12 +21,24 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IoCloseSharp } from 'react-icons/io5';
 import gql from 'graphql-tag';
 import { BsArrowRight } from 'react-icons/bs';
+import { useBoundStore, useStore } from '@/store/zustand';
 
 const MangaEdit = ({ manga, styles }) => {
   console.log('manga', manga);
   const [isLoading, setIsLoading] = useState(false);
   const [genres, setGenres] = useState(manga?.genres);
   const [forceReRender, setForceReRender] = useState(false);
+  // const setManga = useStore((state) => state.setManga(manga));
+
+  useEffect(() => {
+    useBoundStore.setState((state) => ({
+      mangas: { manga },
+    }));
+  }, [manga]);
+
+  const hello = useBoundStore.getState();
+
+  console.log('hello', hello);
 
   const {
     register,
