@@ -12,6 +12,7 @@
     "@apollo/client": "^3.8.10",
     "@nextui-org/react": "^2.2.9",
     "animate.css": "^4.1.1",
+    "canvas-confetti": "^1.9.2",
     "dayjs": "^1.11.10",
     "framer-motion": "^11.0.3",
     "graphql-tag": "^2.12.6",

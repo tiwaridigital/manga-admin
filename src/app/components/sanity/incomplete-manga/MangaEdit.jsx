@@ -21,12 +21,50 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IoCloseSharp } from 'react-icons/io5';
 import gql from 'graphql-tag';
 import { BsArrowRight } from 'react-icons/bs';
+import confetti from 'canvas-confetti';
 
 const MangaEdit = ({ manga, styles }) => {
   console.log('manga', manga);
   const [isLoading, setIsLoading] = useState(false);
   const [genres, setGenres] = useState(manga?.genres);
   const [forceReRender, setForceReRender] = useState(false);
+  const handleConfetti = () => {
+    const count = 200;
+    const defaults = {
+      origin: { y: 0.7 },
+    };
+
+    function fire(particleRatio, opts) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio),
+      });
+    }
+
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    });
+    fire(0.2, {
+      spread: 60,
+    });
+    fire(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8,
+    });
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+    });
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 45,
+    });
+  };
 
   const {
     register,
@@ -252,7 +290,7 @@ const MangaEdit = ({ manga, styles }) => {
         </div>
         <Button
           variant="shadow"
-          className="mt-6 bg-gradient-to-r from-[#11998e] to-[#38ef7d] text-white"
+          className="mt-6 bg-gradient-to-r from-[#11998e] to-[#38ef7d] text-white after:content-[''] after:absolute after:rounded-full after:inset-0 after:bg-background/40 after:z-[-1] after:transition after:!duration-500 hover:after:scale-150 hover:after:opacity-0"
           isLoading={isLoading}
           fullWidth
           radius="full"
@@ -260,6 +298,7 @@ const MangaEdit = ({ manga, styles }) => {
           type="submit"
           onSubmit={handleSubmit}
           endContent={<BsArrowRight size={24} />}
+          onPress={handleConfetti}
         >
           Submit
         </Button>
