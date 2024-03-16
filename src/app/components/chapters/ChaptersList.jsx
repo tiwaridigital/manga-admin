@@ -9,7 +9,7 @@ const ChaptersList = ({ chapters }) => {
   console.log('chapters', chapters);
   const titleArr = chapters[0].slug.split('-');
   const title = titleArr.slice(0, titleArr.length - 2).join(' ');
-  console.log('title', title);
+  console.log('title', titleArr);
 
   return (
     <div className="flex flex-col items-center my-4">
@@ -51,7 +51,7 @@ export const IconWrapper = ({ children, className }) => (
   <div
     className={cn(
       className,
-      'flex items-center rounded-small justify-center w-7 h-7'
+      'flex items-center rounded-small justify-center w-7 h-7',
     )}
   >
     {children}

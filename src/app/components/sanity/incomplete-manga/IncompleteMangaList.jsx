@@ -16,7 +16,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  User
+  User,
 } from '@nextui-org/react';
 import { columns, statusOptions, users } from '@/app/data';
 import { ChevronDownIcon } from '../../../../../public/icons/ChevronDownIcon';
@@ -29,7 +29,7 @@ import { PlusIcon } from '../../../../../public/icons/PlusIcon';
 const statusColorMap = {
   active: 'success',
   paused: 'danger',
-  vacation: 'warning'
+  vacation: 'warning',
 };
 
 const INITIAL_VISIBLE_COLUMNS = ['name', 'createdAt', 'status', 'actions'];
@@ -42,13 +42,13 @@ export default function IncompleteMangaList({ data }) {
   const [filterValue, setFilterValue] = React.useState('');
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_VISIBLE_COLUMNS),
   );
   const [statusFilter, setStatusFilter] = React.useState('all');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: 'age',
-    direction: 'ascending'
+    direction: 'ascending',
   });
   const [page, setPage] = React.useState(1);
 
@@ -58,7 +58,7 @@ export default function IncompleteMangaList({ data }) {
     if (visibleColumns === 'all') return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.uid),
     );
   }, [visibleColumns]);
 
@@ -68,7 +68,7 @@ export default function IncompleteMangaList({ data }) {
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
-        user.title.toLowerCase().includes(filterValue.toLowerCase())
+        user.title.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
 
@@ -77,7 +77,7 @@ export default function IncompleteMangaList({ data }) {
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+        Array.from(statusFilter).includes(user.status),
       );
     }
 
@@ -105,31 +105,26 @@ export default function IncompleteMangaList({ data }) {
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+  const renderCell = React.useCallback((manga, columnKey) => {
+    const cellValue = manga[columnKey];
     console.log('create cell', columnKey);
     switch (columnKey) {
       case 'name':
         return (
-          <Link
-            href={`/sanity/manga/edit/${user._id}`}
-            target="_blank"
-          >
+          <Link href={`/sanity/manga/edit/${manga._id}`} target="_blank">
             <User
-              avatarProps={{ radius: 'lg', src: user.coverImage }}
-              description={user.rating}
-              name={user.title}
-            >
-              {user.title}
-            </User>
+              avatarProps={{ radius: 'lg', src: manga.coverImage }}
+              description={manga.rating}
+              name={`${manga.title} - ${manga.chapters.length}`}
+            />
           </Link>
         );
       case 'createdAt':
-        console.log('create', user);
+        console.log('create', manga);
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">
-              {dateFormatter(user.createdAt)}
+              {dateFormatter(manga.createdAt)}
             </p>
           </div>
         );
@@ -137,7 +132,7 @@ export default function IncompleteMangaList({ data }) {
         return (
           <Chip
             className="capitalize"
-            // color={statusColorMap[user.status]}
+            // color={statusColorMap[manga.status]}
             color={'success'}
             size="sm"
             variant="flat"
@@ -156,7 +151,7 @@ export default function IncompleteMangaList({ data }) {
             >
               Delete
             </Button>
-            <Link href={`/edit/manga/${user.slug}`} target="_blank">
+            <Link href={`/sanity/manga/edit/${manga._id}`} target="_blank">
               <Button
                 size="sm"
                 color="success"
@@ -297,7 +292,7 @@ export default function IncompleteMangaList({ data }) {
     onRowsPerPageChange,
     users.length,
     onSearchChange,
-    hasSearchFilter
+    hasSearchFilter,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -346,7 +341,7 @@ export default function IncompleteMangaList({ data }) {
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: 'max-h-[382px]'
+        wrapper: 'max-h-[382px]',
       }}
       selectedKeys={selectedKeys}
       selectionMode="multiple"

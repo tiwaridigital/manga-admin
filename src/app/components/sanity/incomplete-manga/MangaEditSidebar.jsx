@@ -29,6 +29,7 @@ import 'animate.css/animate.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoCloseSharp } from 'react-icons/io5';
 import { BsArrowRight } from 'react-icons/bs';
+import confetti from 'canvas-confetti';
 
 const MangaEditSidebar = ({ manga, styles }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -42,6 +43,44 @@ const MangaEditSidebar = ({ manga, styles }) => {
   const [genres, setGenres] = useState(manga.genres);
   const [inputGenreValue, setInputGenreValue] = useState('');
   const [isGenreUpdateLoading, setIsGenreUpdateLoading] = useState(false);
+
+  const handleConfetti = () => {
+    var count = 200;
+    var defaults = {
+      origin: { y: 0.7 },
+    };
+
+    function fire(particleRatio, opts) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio),
+      });
+    }
+
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    });
+    fire(0.2, {
+      spread: 60,
+    });
+    fire(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8,
+    });
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+    });
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 45,
+    });
+  };
 
   const toastFun = (msg) => {
     const bounce = cssTransition({
@@ -118,8 +157,6 @@ const MangaEditSidebar = ({ manga, styles }) => {
     toastFun('Genres Successfully Updated');
   };
 
-  console.log('genres', genres);
-
   return (
     <div
       className={`flex flex-col items-center bg-purple-100/50 my-6 rounded-2xl backdrop-blur-sm ${styles}`}
@@ -144,7 +181,7 @@ const MangaEditSidebar = ({ manga, styles }) => {
         <Link
           isBlock
           showAnchorIcon
-          href={`/chapters/${manga.id}`}
+          href={`/sanity/chapters/${manga._id}`}
           target="_blank"
           color="primary"
           className="text-[20px] font-semibold"
@@ -165,6 +202,7 @@ const MangaEditSidebar = ({ manga, styles }) => {
           endContent={<BsArrowRight />}
           fullWidth
           className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg mb-8"
+          onPress={handleConfetti}
         >
           Complete Chapters
         </Button>

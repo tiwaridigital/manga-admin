@@ -9,7 +9,7 @@ import {
   Snippet,
   Textarea,
 } from '@nextui-org/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FcRatings } from 'react-icons/fc';
 import { useForm } from 'react-hook-form';
 import client from '../../../../../client';
@@ -21,50 +21,24 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IoCloseSharp } from 'react-icons/io5';
 import gql from 'graphql-tag';
 import { BsArrowRight } from 'react-icons/bs';
-import confetti from 'canvas-confetti';
+import { useBoundStore, useStore } from '@/store/zustand';
 
 const MangaEdit = ({ manga, styles }) => {
   console.log('manga', manga);
   const [isLoading, setIsLoading] = useState(false);
   const [genres, setGenres] = useState(manga?.genres);
   const [forceReRender, setForceReRender] = useState(false);
-  const handleConfetti = () => {
-    const count = 200;
-    const defaults = {
-      origin: { y: 0.7 },
-    };
+  // const setManga = useStore((state) => state.setManga(manga));
 
-    function fire(particleRatio, opts) {
-      confetti({
-        ...defaults,
-        ...opts,
-        particleCount: Math.floor(count * particleRatio),
-      });
-    }
+  useEffect(() => {
+    useBoundStore.setState((state) => ({
+      mangas: { manga },
+    }));
+  }, [manga]);
 
-    fire(0.25, {
-      spread: 26,
-      startVelocity: 55,
-    });
-    fire(0.2, {
-      spread: 60,
-    });
-    fire(0.35, {
-      spread: 100,
-      decay: 0.91,
-      scalar: 0.8,
-    });
-    fire(0.1, {
-      spread: 120,
-      startVelocity: 25,
-      decay: 0.92,
-      scalar: 1.2,
-    });
-    fire(0.1, {
-      spread: 120,
-      startVelocity: 45,
-    });
-  };
+  const hello = useBoundStore.getState();
+
+  console.log('hello', hello);
 
   const {
     register,
