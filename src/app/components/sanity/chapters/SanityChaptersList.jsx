@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, cn } from '@nextui-org/react';
 import { Listbox, ListboxItem } from '@nextui-org/react';
 import { PlayCircleIcon } from '../../../../../public/icons/PlayCircleIcon';
@@ -9,46 +9,52 @@ import confetti from 'canvas-confetti';
 import SINGLE_MANGA_MUTATE from '@/graphql/mutations/SingleMangaCreate.gql';
 import SINGLE_CHAPTER_MUTATE from '@/graphql/mutations/SingleChapterCreate.gql';
 import client from '../../../../../client';
+import { sanityClient } from '../../../../../sanityClient';
+import toastify from '@/helpers/toastify';
+import { ToastContainer } from 'react-toastify';
+import 'animate.css/animate.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SanityChaptersList = ({ chapters, manga }) => {
-  console.log('title chapters', manga);
+  const [forceReRender, setForceReRender] = useState(false);
   const titleArr = chapters[0].slug.split('-');
+  console.log('bro', chapters);
 
   const handleConfetti = () => {
     var count = 200;
     var defaults = {
-      origin: { y: 0.7 },
+      origin: { y: 0.7 }
     };
 
     function fire(particleRatio, opts) {
       confetti({
         ...defaults,
         ...opts,
-        particleCount: Math.floor(count * particleRatio),
+        particleCount: Math.floor(count * particleRatio)
       });
     }
 
     fire(0.25, {
       spread: 26,
-      startVelocity: 55,
+      startVelocity: 55
     });
     fire(0.2, {
-      spread: 60,
+      spread: 60
     });
     fire(0.35, {
       spread: 100,
       decay: 0.91,
-      scalar: 0.8,
+      scalar: 0.8
     });
     fire(0.1, {
       spread: 120,
       startVelocity: 25,
       decay: 0.92,
-      scalar: 1.2,
+      scalar: 1.2
     });
     fire(0.1, {
       spread: 120,
-      startVelocity: 45,
+      startVelocity: 45
     });
   };
 
@@ -61,7 +67,7 @@ const SanityChaptersList = ({ chapters, manga }) => {
       const objArr = chapter.data.map((x) => {
         return {
           id: x.id,
-          src_origin: x.src_origin,
+          src_origin: x.src_origin
         };
       });
 
@@ -74,7 +80,7 @@ const SanityChaptersList = ({ chapters, manga }) => {
           idx === 0
             ? false
             : true /* Inserted false for 0th idx => because chaptersArr is reversed in descending order */,
-        totalEpisodes: manga.totalChapters,
+        totalEpisodes: manga.totalChapters
       };
     });
 
@@ -96,8 +102,8 @@ const SanityChaptersList = ({ chapters, manga }) => {
           data: x.data,
           slug: x.slug,
           hasNextEp: x.hasNextEp,
-          totalEpisodes: x.totalEpisodes,
-        },
+          totalEpisodes: x.totalEpisodes
+        }
       });
       console.log('chapterResult', chapterResult);
       count++;
@@ -117,7 +123,7 @@ const SanityChaptersList = ({ chapters, manga }) => {
       slug,
       chapters,
       rating,
-      dates,
+      dates
     } = manga;
     const mangaResult = await client.mutate({
       mutation: SINGLE_MANGA_MUTATE,
@@ -134,16 +140,28 @@ const SanityChaptersList = ({ chapters, manga }) => {
         slug,
         chapters,
         rating,
-        dates,
-      },
+        dates
+      }
     });
     console.log('mangaResult', mangaResult);
     return mangaResult.data.insert_singleMang_one;
   };
 
+  const handleChapterDelete = async () => {
+    console.log('handleChapterDelete', chapters);
+    for (const chapter of chapters) {
+      const result = await sanityClient.delete(chapter._id);
+      console.log('result', result);
+      toastify('error', `${chapter.title} Deleted`);
+      setForceReRender(!forceReRender);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center my-4">
-      <h1 className="capitalize text-[40px] text-red-300 font-bold mb-6 tracking-tight inline from-[#f89e00] to-[#da2f68] bg-clip-text text-transparent bg-gradient-to-b">
+      <ToastContainer />
+      <h1
+        className="capitalize text-[40px] text-red-300 font-bold mb-6 tracking-tight inline from-[#f89e00] to-[#da2f68] bg-clip-text text-transparent bg-gradient-to-b">
         <span className="text-blue-600">Sanity: </span>
         {titleArr} - {chapters.length}
       </h1>
@@ -159,12 +177,23 @@ const SanityChaptersList = ({ chapters, manga }) => {
       >
         Complete Chapters
       </Button>
+      <Button
+        variant="solid"
+        color="secondary"
+        radius="full"
+        endContent={<BsArrowRight />}
+        className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg mb-8"
+        onPress={handleConfetti}
+        onClick={handleChapterDelete}
+      >
+        Delete Chapters
+      </Button>
       <Listbox
         aria-label="User Menu"
         // onAction={(key) => alert(key)}
         className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 max-w-[604px] overflow-visible shadow-small rounded-medium"
         itemClasses={{
-          base: 'px-3 first:rounded-t-medium last:rounded-b-medium rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80',
+          base: 'px-3 first:rounded-t-medium last:rounded-b-medium rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80'
         }}
       >
         {chapters.map((chapter, idx) => (
@@ -194,7 +223,7 @@ export const IconWrapper = ({ children, className }) => (
   <div
     className={cn(
       className,
-      'flex items-center rounded-small justify-center w-7 h-7',
+      'flex items-center rounded-small justify-center w-7 h-7'
     )}
   >
     {children}

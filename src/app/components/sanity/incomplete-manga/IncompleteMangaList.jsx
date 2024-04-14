@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Chip,
@@ -16,7 +16,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  User,
+  User
 } from '@nextui-org/react';
 import { columns, statusOptions, users } from '@/app/data';
 import { ChevronDownIcon } from '../../../../../public/icons/ChevronDownIcon';
@@ -25,30 +25,49 @@ import { dateFormatter } from '@/utils/dateFormatter';
 import { UserIcon } from '../../../../../public/icons/UserIcon';
 import { FiEdit2 } from 'react-icons/fi';
 import { PlusIcon } from '../../../../../public/icons/PlusIcon';
+import { sanityClient } from '../../../../../sanityClient';
+import { ToastContainer } from 'react-toastify';
+import toastify from '@/helpers/toastify';
+import 'animate.css/animate.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+import { AiOutlineDelete } from 'react-icons/ai';
+import confetti from 'canvas-confetti';
+import Swal from 'sweetalert2';
 
 const statusColorMap = {
   active: 'success',
   paused: 'danger',
-  vacation: 'warning',
+  vacation: 'warning'
 };
 
-const INITIAL_VISIBLE_COLUMNS = ['name', 'createdAt', 'status', 'actions'];
+const INITIAL_VISIBLE_COLUMNS = [
+  'name',
+  'createdAt',
+  'status',
+  'isPublished',
+  'actions'
+];
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+function splitStringOnCase(inputString) {
+  return inputString.replace(/([a-z])([A-Z])/g, '$1 $2').toUpperCase();
+}
+
 export default function IncompleteMangaList({ data }) {
+  const [forceReRender, setForceReRender] = useState(false);
   const [filterValue, setFilterValue] = React.useState('');
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS),
+    new Set(INITIAL_VISIBLE_COLUMNS)
   );
   const [statusFilter, setStatusFilter] = React.useState('all');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: 'age',
-    direction: 'ascending',
+    direction: 'ascending'
   });
   const [page, setPage] = React.useState(1);
 
@@ -58,17 +77,27 @@ export default function IncompleteMangaList({ data }) {
     if (visibleColumns === 'all') return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid),
+      Array.from(visibleColumns).includes(column.uid)
     );
+  }, [visibleColumns]);
+
+  // this headerColumns is replacement of headerColumns
+  const headerColumn = React.useMemo(() => {
+    return Array.from(visibleColumns).map((x) => {
+      return {
+        name: splitStringOnCase(x),
+        uid: x,
+        sortable: true
+      };
+    });
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
     let filteredUsers = [...data];
-    console.log('filteredItems', hasSearchFilter);
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
-        user.title.toLowerCase().includes(filterValue.toLowerCase()),
+        user.title.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
@@ -77,7 +106,7 @@ export default function IncompleteMangaList({ data }) {
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+        Array.from(statusFilter).includes(user.status)
       );
     }
 
@@ -93,8 +122,6 @@ export default function IncompleteMangaList({ data }) {
     return filteredItems.slice(start, end);
   }, [page, filteredItems, rowsPerPage]);
 
-  console.log('filteredItems users', items);
-
   const sortedItems = React.useMemo(() => {
     return [...items].sort((a, b) => {
       const first = a[sortDescriptor.column];
@@ -105,22 +132,31 @@ export default function IncompleteMangaList({ data }) {
     });
   }, [sortDescriptor, items]);
 
+  console.log('re render', forceReRender);
+
   const renderCell = React.useCallback((manga, columnKey) => {
     const cellValue = manga[columnKey];
-    console.log('create cell', columnKey);
+
     switch (columnKey) {
       case 'name':
+        const name = (
+          <p>
+            {manga.title} -{' '}
+            <span className="font-bold text-green-500 text-[15px]">
+              {manga.chapters.length}
+            </span>
+          </p>
+        );
         return (
           <Link href={`/sanity/manga/edit/${manga._id}`} target="_blank">
             <User
               avatarProps={{ radius: 'lg', src: manga.coverImage }}
               description={manga.rating}
-              name={`${manga.title} - ${manga.chapters.length}`}
+              name={name}
             />
           </Link>
         );
       case 'createdAt':
-        console.log('create', manga);
         return (
           <div className="flex flex-col">
             <p className="text-bold text-small capitalize">
@@ -130,24 +166,67 @@ export default function IncompleteMangaList({ data }) {
         );
       case 'status':
         return (
-          <Chip
-            className="capitalize"
-            // color={statusColorMap[manga.status]}
-            color={'success'}
+          <Button
+            color="success"
             size="sm"
             variant="flat"
           >
             {cellValue}
-          </Chip>
+          </Button>
+        );
+      case 'isPublished':
+        const handlePublish = async () => {
+          const isPublished = manga.isPublished;
+          await sanityClient.patch(manga._id)
+            .set({
+              isPublished: isPublished ? false : true
+            })
+            .commit();
+          toastify(`${isPublished ? 'error' : 'success'}`, `Successfully ${isPublished ? 'Unpublished' : 'Published'}`);
+          setForceReRender(!forceReRender);
+        };
+
+        return (
+          <Button
+            color={manga.isPublished ? 'success' : 'danger'}
+            size="sm"
+            variant="flat"
+            onClick={handlePublish}
+            className="w-[75px]"
+          >
+            {manga.isPublished ? 'Published' : 'Draft'}
+          </Button>
         );
       case 'actions':
+        const handleDelete = async () => {
+          Swal.fire({
+            title: 'Do you want to Delete the Manga?',
+            showDenyButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: `No`
+          }).then(async (result) => {
+            /* Delete the manga from sanity */
+            const query = await sanityClient.delete(manga._id);
+            console.log('result', query);
+            handleConfetti();
+            toastify('success', `Successfully Deleted`);
+
+            if (result.isConfirmed) {
+              Swal.fire('Saved!', '', 'success');
+            } else if (result.isDenied) {
+              Swal.fire('Manga Not Deleted', '', 'info');
+            }
+          });
+        };
+
         return (
           <div className="relative flex justify-center items-center gap-2">
             <Button
               size="sm"
               color="danger"
               variant="bordered"
-              startContent={<UserIcon />}
+              startContent={<AiOutlineDelete size={18} />}
+              onClick={handleDelete}
             >
               Delete
             </Button>
@@ -202,6 +281,7 @@ export default function IncompleteMangaList({ data }) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
+        <ToastContainer />
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
@@ -292,7 +372,7 @@ export default function IncompleteMangaList({ data }) {
     onRowsPerPageChange,
     users.length,
     onSearchChange,
-    hasSearchFilter,
+    hasSearchFilter
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -334,6 +414,44 @@ export default function IncompleteMangaList({ data }) {
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
+  const handleConfetti = () => {
+    var count = 200;
+    var defaults = {
+      origin: { y: 0.7 }
+    };
+
+    function fire(particleRatio, opts) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio)
+      });
+    }
+
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55
+    });
+    fire(0.2, {
+      spread: 60
+    });
+    fire(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8
+    });
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2
+    });
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 45
+    });
+  };
+
   return (
     <Table
       aria-label="Example table with custom cells, pagination and sorting"
@@ -341,7 +459,7 @@ export default function IncompleteMangaList({ data }) {
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: 'max-h-[382px]',
+        wrapper: 'max-h-[382px]'
       }}
       selectedKeys={selectedKeys}
       selectionMode="multiple"
@@ -350,8 +468,9 @@ export default function IncompleteMangaList({ data }) {
       topContentPlacement="outside"
       onSelectionChange={setSelectedKeys}
       onSortChange={setSortDescriptor}
+      onCellAction={(key) => console.log('key', key)}
     >
-      <TableHeader columns={headerColumns}>
+      <TableHeader columns={headerColumn}>
         {(column) => (
           <TableColumn
             key={column.uid}
@@ -365,7 +484,7 @@ export default function IncompleteMangaList({ data }) {
       </TableHeader>
       <TableBody emptyContent={'No Mangas found'} items={sortedItems}>
         {(item) => (
-          <TableRow key={item.id}>
+          <TableRow key={item._id}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

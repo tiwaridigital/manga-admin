@@ -3,9 +3,13 @@ import Layout from '@/app/layout/Layout';
 import { sanityClient } from '../../../../../sanityClient';
 import IncompleteMangaList from '@/app/components/sanity/incomplete-manga/IncompleteMangaList';
 import ContentWrapper from '@/app/components/ContentWrapper';
+import { unstable_noStore } from 'next/cache';
 
 const Page = async () => {
-  const mangas = await sanityClient.fetch(`*[_type == "incompleteManga" && !(_id in path('drafts.**'))]`);
+  unstable_noStore();
+  const mangas = await sanityClient.fetch(
+    `*[_type == "incompleteManga" && !(_id in path('drafts.**'))]`
+  );
   return (
     <Layout>
       <ContentWrapper>
@@ -20,5 +24,5 @@ const Page = async () => {
 export default Page;
 
 export const metadata = {
-  title: 'Sanity - Incomplete Manga'
+  title: 'Sanity - Incomplete Manga',
 };
