@@ -6,7 +6,7 @@ import {
   Divider,
   Input,
   Snippet,
-  Textarea
+  Textarea,
 } from '@nextui-org/react';
 import { useState } from 'react';
 import { FcRatings } from 'react-icons/fc';
@@ -19,6 +19,7 @@ import 'animate.css/animate.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { IoCloseSharp } from 'react-icons/io5';
 import gql from 'graphql-tag';
+import confetti from 'canvas-confetti';
 
 const EditManga = ({ manga, styles }) => {
   console.log('manga', manga);
@@ -30,8 +31,47 @@ const EditManga = ({ manga, styles }) => {
     register,
     handleSubmit,
     watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
+
+  const confettiStyle = `after:content-[''] after:absolute after:rounded-full after:inset-0 after:bg-background/40 after:z-[-1] after:transition after:!duration-500 hover:after:scale-150 hover:after:opacity-0`;
+  const handleConfetti = () => {
+    const count = 200;
+    const defaults = {
+      origin: { y: 0.7 },
+    };
+
+    function fire(particleRatio, opts) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio),
+      });
+    }
+
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    });
+    fire(0.2, {
+      spread: 60,
+    });
+    fire(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8,
+    });
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+    });
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 45,
+    });
+  };
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -45,7 +85,7 @@ const EditManga = ({ manga, styles }) => {
       title,
       artist,
       author,
-      coverImage
+      coverImage,
     } = data;
     const result = await client.mutate({
       mutation: SINGLE_MANGA_MUTATION,
@@ -59,8 +99,8 @@ const EditManga = ({ manga, styles }) => {
         rating: manga.rating,
         status,
         title,
-        coverImage
-      }
+        coverImage,
+      },
     });
 
     console.log('result', result);
@@ -75,14 +115,14 @@ const EditManga = ({ manga, styles }) => {
       progress: undefined,
       theme: 'light',
       transition: bounce,
-      closeButton: <IoCloseSharp size={24} />
+      closeButton: <IoCloseSharp size={24} />,
     });
     setForceReRender(!forceReRender);
   };
 
   const bounce = cssTransition({
     enter: 'animate__animated animate__bounceIn',
-    exit: 'animate__animated animate__bounceOut'
+    exit: 'animate__animated animate__bounceOut',
   });
 
   const handleGenresClose = (genreToRemove) => {
@@ -94,23 +134,23 @@ const EditManga = ({ manga, styles }) => {
 
   const handleGenreUpdate = async () => {
     const genreMutation = gql`
-        mutation updateGenre($mangaId: uuid!, $genres: jsonb) {
-            update_singleMang_by_pk(
-                pk_columns: { id: $mangaId }
-                _set: { genres: $genres }
-            ) {
-                title
-                genres
-            }
+      mutation updateGenre($mangaId: uuid!, $genres: jsonb) {
+        update_singleMang_by_pk(
+          pk_columns: { id: $mangaId }
+          _set: { genres: $genres }
+        ) {
+          title
+          genres
         }
+      }
     `;
 
     const result = await client.mutate({
       mutation: genreMutation,
       variables: {
         mangaId: manga.id,
-        genres
-      }
+        genres,
+      },
     });
 
     console.log('genre result', result);
@@ -125,7 +165,7 @@ const EditManga = ({ manga, styles }) => {
         <Snippet
           classNames={{
             base: 'p-2 w-full rounded-lg mt-2 bg-white',
-            pre: 'text-[20px] sm:text-[30px] pb-[10px] font-sans font-bold tracking-tight inline from-[#f89e00] to-[#da2f68] bg-clip-text text-transparent bg-gradient-to-b'
+            pre: 'text-[20px] sm:text-[30px] pb-[10px] font-sans font-bold tracking-tight inline from-[#f89e00] to-[#da2f68] bg-clip-text text-transparent bg-gradient-to-b',
           }}
           hideSymbol
         >
@@ -257,6 +297,7 @@ const EditManga = ({ manga, styles }) => {
           size="lg"
           type="submit"
           onSubmit={handleSubmit}
+          onPress={handleConfetti}
         >
           Submit
         </Button>

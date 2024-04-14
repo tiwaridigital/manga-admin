@@ -264,7 +264,7 @@ const MangaEdit = ({ manga, styles }) => {
         </div>
         <Button
           variant="shadow"
-          className="mt-6 bg-gradient-to-r from-[#11998e] to-[#38ef7d] text-white"
+          className="mt-6 bg-gradient-to-r from-[#11998e] to-[#38ef7d] text-white after:content-[''] after:absolute after:rounded-full after:inset-0 after:bg-background/40 after:z-[-1] after:transition after:!duration-500 hover:after:scale-150 hover:after:opacity-0"
           isLoading={isLoading}
           fullWidth
           radius="full"
@@ -272,6 +272,7 @@ const MangaEdit = ({ manga, styles }) => {
           type="submit"
           onSubmit={handleSubmit}
           endContent={<BsArrowRight size={24} />}
+          onPress={handleConfetti}
         >
           Submit
         </Button>
