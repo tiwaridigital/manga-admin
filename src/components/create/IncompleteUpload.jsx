@@ -1,5 +1,4 @@
 'use client';
-
 import { Button, ButtonGroup, Image, Spinner } from '@nextui-org/react';
 import React, { useEffect, useState } from 'react';
 import GradientButton, {
@@ -8,6 +7,7 @@ import GradientButton, {
 } from '../Buttons';
 import axios from 'axios';
 import { inCompleteUploadFetchDataFromServer } from '@/app/_actions/inCompleteUploadFetchDataFromServer';
+import { slugify } from '@/utils/helpers';
 
 const InCompleteUpload = ({ incompleteMangas }) => {
   const [mangas, setMangas] = useState([]);
@@ -58,16 +58,16 @@ const InCompleteUpload = ({ incompleteMangas }) => {
 
     console.log('inCompleteUploadFetchDataFromServer completed');
 
-    // try {
-    const createdChapters = await createChapters(
-      data.detail_manga,
-      mangaResult,
-      data.chapterImages
-    );
-    console.log('createdChapters executed');
-    // } catch (err) {
-    //   throw new Error(`Error Creating Single Manga to DB: ${err}`);
-    // }
+    try {
+      const createdChapters = await createChapters(
+        data.detail_manga,
+        mangaResult,
+        data.chapterImages
+      );
+      console.log('createdChapters executed');
+    } catch (err) {
+      throw new Error(`Error Creating Single Manga to DB: ${err}`);
+    }
   };
 
   const createChapters = async (detail_manga, mangaResult, chapterImages) => {

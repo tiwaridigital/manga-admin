@@ -36,39 +36,48 @@ const Page = () => {
      * 1 => create another chapters in chapters field
      * 2 => update no of comppletedChapters in main manga using id
      */
-    const chapterObject = {
-      _type: 'chapters',
-      title: `${manga.title} Chapter ${
-        manga.totalChapters - manga.completedChapters
-      }`,
-      data: parsedArray.map((x, idx) => ({
-        _key: idx.toString(),
-        id: idx.toString(),
-        src_origin: x.src_origin,
-        delete_url: x.delete_url,
-      })),
-      slug: slugify(
-        `${manga.slug} chapter ${manga.totalChapters - manga.completedChapters}`
-      ),
-      url: {
-        _ref: manga._id,
-        _type: 'reference',
-        _weak: true,
-      },
-      hasNextEp:
-        manga.totalChapters - manga.completedChapters > 1 ? true : false,
-    };
-    const createChapters = await sanityClient.create(chapterObject);
-    console.log('createdChapter', createChapters);
+    let idx = 0;
+    for (const chapter of parsedArray) {
+      console.log('idx', idx);
 
-    const mangaUpdate = await sanityClient
-      .patch(manga._id)
-      .set({
-        completedChapters: manga.completedChapters + 1,
-      })
-      .commit();
-    console.log('manga', mangaUpdate);
-    setForceReRender(!forceReRender);
+      const chapterObject = {
+        _type: 'chapters',
+        title: `${manga.title} Chapter ${
+          manga.totalChapters - manga.completedChapters - idx
+        }`,
+        data: chapter.map((x, idx) => ({
+          _key: idx.toString(),
+          id: idx.toString(),
+          src_origin: x.src_origin,
+          delete_url: x.delete_url,
+        })),
+        slug: slugify(
+          `${manga.slug} chapter ${
+            manga.totalChapters - manga.completedChapters - idx
+          }`
+        ),
+        url: {
+          _ref: manga._id,
+          _type: 'reference',
+          _weak: true,
+        },
+        hasNextEp:
+          manga.totalChapters - manga.completedChapters > 1 ? true : false,
+      };
+      const createChapters = await sanityClient.create(chapterObject);
+      console.log('createdChapter', createChapters);
+
+      const mangaUpdate = await sanityClient
+        .patch(manga._id)
+        .set({
+          completedChapters: manga.completedChapters + idx + 1,
+        })
+        .commit();
+      console.log('manga', mangaUpdate);
+      idx++;
+      setChapterArr((prev) => [...prev]);
+      setForceReRender((prevState) => !prevState);
+    }
   };
 
   console.log('mangaId', manga);
