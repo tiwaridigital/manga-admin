@@ -1,8 +1,8 @@
 // 'use client'
 import Layout from '@/app/layout/Layout';
 import { sanityClient } from '../../../../../sanityClient';
-import IncompleteMangaList from '@/app/components/sanity/incomplete-manga/IncompleteMangaList';
-import ContentWrapper from '@/app/components/ContentWrapper';
+import IncompleteMangaList from '@/components/sanity/incomplete-manga/IncompleteMangaList';
+import ContentWrapper from '@/components/ContentWrapper';
 import { unstable_noStore } from 'next/cache';
 
 const Page = async () => {

@@ -1,5 +1,5 @@
-import ContentWrapper from '@/app/components/ContentWrapper';
-import SingleChapter from '@/app/components/chapters/singleChapter/SingleChapter';
+import ContentWrapper from '@/components/ContentWrapper';
+import SingleChapter from '@/components/chapters/singleChapter/SingleChapter';
 import Layout from '@/app/layout/Layout';
 import fetchSingleChapter from '@/lib/fetchSingleChapter';
 import React from 'react';

@@ -1,6 +1,6 @@
-import SanityChaptersList from '@/app/components/sanity/chapters/SanityChaptersList';
+import SanityChaptersList from '@/components/sanity/chapters/SanityChaptersList';
 import { sanityClient } from '../../../../../../sanityClient';
-import ContentWrapper from '@/app/components/ContentWrapper';
+import ContentWrapper from '@/components/ContentWrapper';
 import Layout from '@/app/layout/Layout';
 import { unstable_noStore } from 'next/cache';
 

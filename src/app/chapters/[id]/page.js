@@ -1,4 +1,4 @@
-import Chapters from '@/app/components/chapters/ChaptersList';
+import Chapters from '@/components/chapters/ChaptersList';
 import Layout from '@/app/layout/Layout';
 import fetchAllChapters from '@/lib/fetchAllChapters';
 

@@ -1,8 +1,8 @@
-import MangaEdit from '@/app/components/sanity/incomplete-manga/MangaEdit';
+import MangaEdit from '@/components/sanity/incomplete-manga/MangaEdit';
 import Layout from '@/app/layout/Layout';
-import ContentWrapper from '@/app/components/ContentWrapper';
+import ContentWrapper from '@/components/ContentWrapper';
 import { sanityClient } from '../../../../../../../sanityClient';
-import MangaEditSidebar from '@/app/components/sanity/incomplete-manga/MangaEditSidebar';
+import MangaEditSidebar from '@/components/sanity/incomplete-manga/MangaEditSidebar';
 
 const Page = async ({ params }) => {
   const mangaQuery = `*[_type == "incompleteManga" && _id == "${params.id}"]`;

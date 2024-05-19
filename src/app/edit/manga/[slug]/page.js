@@ -1,8 +1,8 @@
 import Layout from '@/app/layout/Layout';
-import EditManga from '@/app/components/manga/editManga/EditManga';
-import ContentWrapper from '@/app/components/ContentWrapper';
+import EditManga from '@/components/manga/editManga/EditManga';
+import ContentWrapper from '@/components/ContentWrapper';
 import fetchSingleManga from '@/lib/fetchSingleManga';
-import Sidebar from '@/app/components/manga/editManga/Sidebar';
+import Sidebar from '@/components/manga/editManga/Sidebar';
 import { unstable_noStore as noStore } from 'next/cache';
 
 const Page = async ({ params }) => {
@@ -24,5 +24,5 @@ const Page = async ({ params }) => {
 export default Page;
 
 export const metadata = {
-  title: 'Edit Manga'
+  title: 'Edit Manga',
 };
