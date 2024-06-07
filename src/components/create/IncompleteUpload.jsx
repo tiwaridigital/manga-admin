@@ -18,6 +18,8 @@ const InCompleteUpload = ({ incompleteMangas }) => {
     setIsLoading(false);
   }, [incompleteMangas]);
 
+  console.log('InCompleteUpload called');
+
   const handleIncompleteUpload = async () => {
     console.log('handleIncompleteUpload called');
     const res = await axios.post('/api/socket');
@@ -163,12 +165,10 @@ const InCompleteUpload = ({ incompleteMangas }) => {
               </p>
 
               <div className="flex gap-6 items-center">
-                <GreenGradientButton
-                  btnText="Complete Chapters"
-                  color="purple"
-                  onclick={() => handleDataFetching_Insertion(manga)}
-                />
-                <GreenGradientButton btnText="Move to Hasura" color="teal" />
+                <Button onClick={() => handleDataFetching_Insertion(manga)}>
+                  Complete Chapters
+                </Button>
+                <Button>Move to Hasura</Button>
               </div>
             </div>
           </div>

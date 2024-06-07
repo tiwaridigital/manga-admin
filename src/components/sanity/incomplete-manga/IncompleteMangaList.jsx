@@ -33,6 +33,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AiOutlineDelete } from 'react-icons/ai';
 import confetti from 'canvas-confetti';
 import Swal from 'sweetalert2';
+import GradientHeading from '@/components/GradientHeading';
 
 const statusColorMap = {
   active: 'success',
@@ -131,8 +132,6 @@ export default function IncompleteMangaList({ data }) {
       return sortDescriptor.direction === 'descending' ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
-
-  console.log('re render', forceReRender);
 
   const renderCell = React.useCallback((manga, columnKey) => {
     const cellValue = manga[columnKey];
@@ -282,6 +281,10 @@ export default function IncompleteMangaList({ data }) {
     return (
       <div className="flex flex-col gap-4">
         <ToastContainer />
+        {/* <GradientHeading text={'Sanity Mangas List'} fontSize={42} /> */}
+        <h1 className="text-[20px] md:text-[42px] mt-[-30px] text-center pb-[10px] font-sans font-bold tracking-tight inline from-[#f89e00] to-[#da2f68] bg-clip-text text-transparent bg-gradient-to-b">
+          Sanity Manga List
+        </h1>
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable

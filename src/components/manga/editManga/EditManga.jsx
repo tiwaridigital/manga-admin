@@ -22,7 +22,6 @@ import gql from 'graphql-tag';
 import confetti from 'canvas-confetti';
 
 const EditManga = ({ manga, styles }) => {
-  console.log('manga', manga);
   const [isLoading, setIsLoading] = useState(false);
   const [genres, setGenres] = useState(manga.genres);
   const [forceReRender, setForceReRender] = useState(false);

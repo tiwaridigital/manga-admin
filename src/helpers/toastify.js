@@ -1,10 +1,12 @@
-import { cssTransition, toast } from 'react-toastify';
+import { toast, cssTransition } from 'react-toastify';
+import 'animate.css/animate.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { IoCloseSharp } from 'react-icons/io5';
 
-const toastify = (type, message) => {
+const toastify = (type, message, closeTime = 3000) => {
   toast[type](message, {
     position: 'top-right',
-    autoClose: 5000,
+    autoClose: closeTime,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -12,13 +14,12 @@ const toastify = (type, message) => {
     progress: undefined,
     theme: 'light',
     transition: bounce,
-    closeButton: <IoCloseSharp size={24} />
+    closeButton: <IoCloseSharp size={24} />,
   });
 };
 export default toastify;
 
 const bounce = cssTransition({
   enter: 'animate__animated animate__bounceIn',
-  exit: 'animate__animated animate__bounceOut'
+  exit: 'animate__animated animate__bounceOut',
 });
-

@@ -9,8 +9,6 @@ const Page = async () => {
     `*[_type == "incompleteManga" && !(_id in path(\'drafts.**\'))]`
   );
 
-  console.log('mangas', incompleteMangas);
-
   return (
     <Layout>
       <ContentWrapper>

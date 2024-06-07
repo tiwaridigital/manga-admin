@@ -74,8 +74,6 @@ export default async function handleInterruptedUpload(
         completedChapters: mangaResult.completedChapters + chapterImages.length,
       })
       .commit();
-
-    console.log('mangaUpdated', mangaUpdated);
   }
 }
 
@@ -85,7 +83,6 @@ const createManga = async (
   stoppedChapterIdx,
   srcUrl
 ) => {
-  console.log('detail_manga', detail_manga);
   const {
     title,
     alterNativeName,
@@ -116,8 +113,6 @@ const createManga = async (
     };
   });
 
-  console.log('chapters', chapters);
-
   const sanityObj = {
     _type: 'incompleteManga',
     id: uuid(),
@@ -136,11 +131,10 @@ const createManga = async (
     rating,
     dates,
     totalChapters: detail_manga.chapters.length,
-    srcUrl,
+    srcUrl: mangaResult,
   };
 
   const mangaResult = await sanityClient.create(sanityObj);
-  console.log('mangaResult', mangaResult);
   const chaptersCreated = await createChapters(
     detail_manga,
     mangaResult,
@@ -155,7 +149,6 @@ const createChapters = async (
   chapterImages,
   stoppedChapterIdx
 ) => {
-  console.log('mangaResult', mangaResult);
   /*
    * Create Chapter Now => After Manga is Created
    */
@@ -172,8 +165,6 @@ const createChapters = async (
         last_update: x.last_update,
       };
     });
-
-  console.log('chapters', chaptersArr);
 
   let count = 0;
   for (const x of chaptersArr) {
