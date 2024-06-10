@@ -28,12 +28,11 @@ export default async function handleInterruptedUpload(
       detail_manga,
       chapterImages,
       stoppedChapterIdx,
-      mangaResult.srcUrl
+      mangaResult
     );
   } else {
     console.log('handleInterruptedUpload else block - only create chapters');
     console.log('caller incomplete-upload');
-    // console.log('chapterImages', chapterImages);
     for (const outerArr of chapterImages) {
       const idx = chapterImages.indexOf(outerArr);
       console.log('outerArr', idx);
@@ -74,7 +73,10 @@ export default async function handleInterruptedUpload(
         completedChapters: mangaResult.completedChapters + chapterImages.length,
       })
       .commit();
+    
+    console.log("manga chapter updated", mangaUpdated);
   }
+
 }
 
 const createManga = async (
@@ -112,7 +114,6 @@ const createManga = async (
       last_update: x.last_update,
     };
   });
-
   const sanityObj = {
     _type: 'incompleteManga',
     id: uuid(),
@@ -131,7 +132,9 @@ const createManga = async (
     rating,
     dates,
     totalChapters: detail_manga.chapters.length,
-    srcUrl: mangaResult,
+    srcUrl: srcUrl,
+    isMovedToHasura: false,
+    isPublished: true
   };
 
   const mangaResult = await sanityClient.create(sanityObj);

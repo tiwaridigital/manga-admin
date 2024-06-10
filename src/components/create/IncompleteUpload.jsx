@@ -1,34 +1,19 @@
 'use client';
-import { Button, ButtonGroup, Image, Spinner } from '@nextui-org/react';
+import { Button, Image, Spinner } from '@nextui-org/react';
 import React, { useEffect, useState } from 'react';
-import GradientButton, {
-  GreenGradientButton,
-  PurpleGradientButton,
-} from '../Buttons';
-import axios from 'axios';
 import { inCompleteUploadFetchDataFromServer } from '@/app/_actions/inCompleteUploadFetchDataFromServer';
 import { slugify } from '@/utils/helpers';
+import { sanityClient } from '../../../sanityClient';
 
 const InCompleteUpload = ({ incompleteMangas }) => {
   const [mangas, setMangas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setMangas([...incompleteMangas]);
+    const filterInCompleteUploads = incompleteMangas.filter(manga => manga.completedChapters !== manga.totalChapters);
+    setMangas([...filterInCompleteUploads]);
     setIsLoading(false);
   }, [incompleteMangas]);
-
-  console.log('InCompleteUpload called');
-
-  const handleIncompleteUpload = async () => {
-    console.log('handleIncompleteUpload called');
-    const res = await axios.post('/api/socket');
-    console.log('response', res);
-  };
-
-  const handleMoveToHasura = () => {
-    console.log('handleMove ');
-  };
 
   const selectedSrc = 'asuratoon';
   const srcUrl =
@@ -66,6 +51,7 @@ const InCompleteUpload = ({ incompleteMangas }) => {
         mangaResult,
         data.chapterImages
       );
+      console.log("createdChapters", createdChapters);
       console.log('createdChapters executed');
     } catch (err) {
       throw new Error(`Error Creating Single Manga to DB: ${err}`);
@@ -102,6 +88,7 @@ const InCompleteUpload = ({ incompleteMangas }) => {
     for (const x of chaptersArr) {
       const idx = chaptersArr.indexOf(x); // gets current idx
       console.log('idx', idx);
+      console.log("current creating chapter Number", mangaResult.totalChapters - mangaResult.completedChapters - idx);
       const chapterObj = {
         _type: 'chapters',
         slug: slugify(

@@ -27,7 +27,6 @@ const Page = () => {
     const query = `*[_type == "incompleteManga" && id == "${mangaId}"]`;
     const data = await sanityClient.fetch(query);
     setManga(data[0]);
-    console.log('manga', manga);
     setLoading(false);
   };
 
@@ -189,7 +188,7 @@ const Page = () => {
             <Input
               type="text"
               size="sm"
-              placeholder="Enter Manga ID... (manga.id)"
+              placeholder="Enter Manga ID... (manga.id) from sanity"
               onChange={(e) => handleMangaUrlChange(e)}
             />
             <Button onClick={getManga}>Get Manga Details</Button>

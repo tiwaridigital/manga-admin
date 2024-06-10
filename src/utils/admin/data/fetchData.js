@@ -21,7 +21,7 @@ export const fetchData = async (src, url, isIncomplete = false) => {
       // Retrieve the manga details
       const detail_manga = await manga.getDetailManga(
         // '05bd710c-d94a-45eb-be99-2109d58f1006'
-        url
+        url,
       );
 
       // get all chapters data
@@ -31,7 +31,7 @@ export const fetchData = async (src, url, isIncomplete = false) => {
           await new Promise((resolve) => setTimeout(resolve, 3000));
           const data = await manga.getDataChapter(chapter.path);
           return data;
-        })
+        }),
       );
 
       return { detail_manga, chapterData };
@@ -60,9 +60,9 @@ export const fetchData = async (src, url, isIncomplete = false) => {
           return data.chapter_data.filter(
             (x) =>
               x.src_origin !==
-              'https://www.asurascans.com/wp-content/uploads/2021/04/page100-10.jpg'
+              'https://www.asurascans.com/wp-content/uploads/2021/04/page100-10.jpg',
           );
-        })
+        }),
       );
 
       console.log('chapterDate retuned now uploading');
@@ -89,7 +89,7 @@ export const fetchData = async (src, url, isIncomplete = false) => {
           const image = await handleImageHost(
             `${chapter.src_origin}`,
             `${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`,
-            imageHost
+            imageHost,
           );
           console.log('image', image);
 
@@ -99,10 +99,10 @@ export const fetchData = async (src, url, isIncomplete = false) => {
               imageHost === 'imgBB'
                 ? image.data.url
                 : imageHost === 'cloudFlare'
-                ? `https://gpfasts.xyz/${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`
-                : imageHost === 'freeImageHost'
-                ? image.image.url
-                : 'null',
+                  ? `https://gpfasts.xyz/${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`
+                  : imageHost === 'freeImageHost'
+                    ? image.image.url
+                    : 'null',
             // src_origin: `https://mangu.b-cdn.net/${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`,
           };
 
@@ -125,7 +125,6 @@ export const fetchData = async (src, url, isIncomplete = false) => {
     } catch (err) {
       console.log('An error occurred while fetching from Asuratoon', err);
       console.log('throw block stoppedChapterIdx', chapterIdx);
-      console.log('url', url);
       handleInterruptedUpload(imagesArr, detail_manga, chapterIdx, '', url);
     }
   } else if (src === 'nettruyenus') {
@@ -138,7 +137,7 @@ export const fetchData = async (src, url, isIncomplete = false) => {
     // Retrieve the manga details
     const detail_manga = await manga.getDetailManga(
       // '71a621f8-c2bc-496e-aa34-f4b91e9874ac'
-      'https://www.nettruyenus.com/truyen-tranh/the-reincarnation-magician-of-the-inferior-eyes-215350'
+      'https://www.nettruyenus.com/truyen-tranh/the-reincarnation-magician-of-the-inferior-eyes-215350',
     );
 
     console.log('detail_manga', detail_manga);
@@ -148,7 +147,7 @@ export const fetchData = async (src, url, isIncomplete = false) => {
       detail_manga.chapters.slice(0, 1).map(async (chapter) => {
         const data = await manga.getDataChapter(chapter.url);
         return data;
-      })
+      }),
     );
 
     return { detail_manga, chapterData };
@@ -158,7 +157,7 @@ export const fetchData = async (src, url, isIncomplete = false) => {
   }
 };
 
-export const handleImageHost = async (srcImgurl, fileName, imgHost) => {
+const handleImageHost = async (srcImgurl, fileName, imgHost) => {
   console.log('handleImageHost called');
   switch (imgHost) {
     case 'imgBB':
