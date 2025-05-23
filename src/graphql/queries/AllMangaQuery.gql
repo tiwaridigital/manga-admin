@@ -1,0 +1,18 @@
+query AllMangaQuery {
+  singleMang(order_by: { createdAt: desc }) {
+    alternativeName
+    artist
+    author
+    chapters
+    coverImage
+    createdAt
+    description
+    genres
+    id
+    slug
+    src
+    status
+    title
+    rating
+  }
+}

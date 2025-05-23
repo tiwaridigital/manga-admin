@@ -1,0 +1,10 @@
+mutation InCompleteChapterTrackerMutation($chapterId: uuid!) {
+    insert_chapter_tracker_one(
+        object: {
+            incomplete: $chapterId
+        }
+    ) {
+        id
+        incomplete
+    }
+}

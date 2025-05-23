@@ -1,0 +1,10 @@
+query AllChaptersQuery($mangaId: uuid!) {
+  chapters(where: { url: { _eq: $mangaId } }) {
+    title
+    totalEpisodes
+    url
+    data
+    hasNextEp
+    slug
+  }
+}
