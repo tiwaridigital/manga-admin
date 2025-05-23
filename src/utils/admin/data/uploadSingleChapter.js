@@ -4,7 +4,11 @@ import { handleImageHost } from './fetchData';
 const uploadSingleChapter = async (
   detail_manga,
   chapterData,
+<<<<<<< HEAD
   chapterNumber
+=======
+  chapterNumber,
+>>>>>>> master
 ) => {
   console.log('uploadSingleChapter called');
 
@@ -23,7 +27,11 @@ const uploadSingleChapter = async (
     const image = await handleImageHost(
       `${chapter.src_origin}`,
       `${detail_manga.title}/chapter-${chapterNumber}/${idx}.${fileExtension}`,
+<<<<<<< HEAD
       imageHost
+=======
+      imageHost,
+>>>>>>> master
     );
     console.log('image', image);
 
@@ -33,10 +41,17 @@ const uploadSingleChapter = async (
         imageHost === 'imgBB'
           ? image.data.url
           : imageHost === 'cloudFlare'
+<<<<<<< HEAD
           ? `https://gpfasts.xyz/${detail_manga.title}/chapter-${chapterNumber}/${idx}.${fileExtension}`
           : imageHost === 'freeImageHost'
           ? image.image.url
           : 'null',
+=======
+            ? `https://anasset.xyz/anstrmx/${detail_manga.title}/chapter-${chapterNumber}/${idx}.${fileExtension}`
+            : imageHost === 'freeImageHost'
+              ? image.image.url
+              : 'null',
+>>>>>>> master
       // src_origin: `https://mangu.b-cdn.net/${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`,
     };
 

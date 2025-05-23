@@ -12,7 +12,7 @@ import handleInterruptedUpload from '@/utils/admin/data/handleInterruptedUpload'
 const { Manga, MangaType } = require('manga-lib');
 const FormData = require('form-data');
 
-export const fetchData = async (src, url, isIncomplete = false) => {
+export const fetchDataNew = async (src, url, isIncomplete = false) => {
   if (src === 'mangadex') {
     try {
       // Create a new instance of the manga site, MangaType.NETTRUYEN is currently support for https://www.nettruyenplus.com/
@@ -46,26 +46,34 @@ export const fetchData = async (src, url, isIncomplete = false) => {
     let chapterIdx = 0;
 
     const imagesArr = [];
-    let detail_manga;
-    const manga = new Manga().build(MangaType.ASURASCANS);
+    // let detail_manga;
+    const { data: manga } = await axios.post(
+      'http://localhost:3000/api/fetch-manga',
+      {
+        providerName: 'MangaDex',
+        mangaId: url,
+      },
+    );
+
+    let { mangaInfo: detail_manga, chapterDetail: chapterData } = manga;
 
     try {
       // Retrieve the manga details
-      detail_manga = await manga.getDetailManga(url);
+      // detail_manga = await manga.getDetailManga(url);
       console.log('detail_manga', detail_manga);
       // get all chapters data
-      const chapterData = await Promise.all(
-        detail_manga.chapters.map(async (chapter) => {
-          const data = await manga.getDataChapter(chapter.url);
-          return data.chapter_data.filter(
-            (x) =>
-              x.src_origin !==
-              'https://www.asurascans.com/wp-content/uploads/2021/04/page100-10.jpg',
-          );
-        }),
-      );
+      //   const chapterData = await Promise.all(
+      //     detail_manga.chapters.map(async (chapter) => {
+      //       const data = await manga.getDataChapter(chapter.url);
+      //       return data.chapter_data.filter(
+      //         (x) =>
+      //           x.src_origin !==
+      //           'https://www.asurascans.com/wp-content/uploads/2021/04/page100-10.jpg',
+      //       );
+      //     }),
+      //   );
 
-      console.log('chapterDate retuned now uploading');
+      console.log('chapterDate retuned now uploading', chapterData);
       // const imagesArr = [];
       /*
        * Upload Images to imgBB or Any Other Host
@@ -78,16 +86,16 @@ export const fetchData = async (src, url, isIncomplete = false) => {
         let innerChapterIdx = 0;
         await new Promise((resolve) => setTimeout(resolve, 2000));
         for (const chapter of chapters) {
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          const fileSplit = chapter.src_origin.split('.');
-          const fileExtension = fileSplit[fileSplit.length - 1];
+          // await new Promise((resolve) => setTimeout(resolve, 2000));
+          const fileSplit = chapter.img.split('.');
+          const fileExtension = 'webp' || fileSplit[fileSplit.length - 1];
           //convert webp images to jpg before uploading only in case of imgur => handle it later
 
           console.log('uploading image', new Date());
           // const image = await imgBBUpload(chapter.src_origin);
-          const imageHost = 'imgBB'; // Supported Hosts: imgBB, cloudFlare, bunnyCDN
+          const imageHost = 'cloudFlare'; // Supported Hosts: imgBB, cloudFlare, bunnyCDN
           const image = await handleImageHost(
-            `${chapter.src_origin}`,
+            `${chapter.img}`,
             `${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`,
             imageHost,
           );
@@ -99,11 +107,7 @@ export const fetchData = async (src, url, isIncomplete = false) => {
               imageHost === 'imgBB'
                 ? image.data.url
                 : imageHost === 'cloudFlare'
-<<<<<<< HEAD
-                  ? `https://gpfasts.xyz/${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`
-=======
-                  ? `https://anasset.xyz/anstrmx/${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`
->>>>>>> master
+                  ? `https://anasset.xyz/anstrmx/${encodeURIComponent(detail_manga.title)}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`
                   : imageHost === 'freeImageHost'
                     ? image.image.url
                     : 'null',
@@ -176,8 +180,4 @@ const handleImageHost = async (srcImgurl, fileName, imgHost) => {
       console.error('Please Provide Image Host');
       return null;
   }
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> master
