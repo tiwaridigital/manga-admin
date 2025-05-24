@@ -1,3 +1,5 @@
+import { Button, Card, CardFooter, CardHeader } from '@nextui-org/react';
+import Image from 'next/image';
 import React from 'react';
 
 const SingleMangaCard = () => {
@@ -103,7 +105,7 @@ const SingleMangaCard = () => {
             <div className="flex flex-col">
               <p className="text-tiny text-white/60">Breathing App</p>
               <p className="text-tiny text-white/60">
-                Get a good night's sleep.
+                Get a good nights sleep.
               </p>
             </div>
           </div>
