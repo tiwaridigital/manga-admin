@@ -29,15 +29,9 @@ export const inCompleteUploadFetchData = async (src, url, mangaResult) => {
             return data.chapter_data.filter(
               (x) =>
                 x.src_origin !==
-<<<<<<< HEAD
-                'https://www.asurascans.com/wp-content/uploads/2021/04/page100-10.jpg'
-            );
-          })
-=======
                 'https://www.asurascans.com/wp-content/uploads/2021/04/page100-10.jpg',
             );
           }),
->>>>>>> master
       );
 
       console.log('chapterDate retuned now uploading');
@@ -63,11 +57,7 @@ export const inCompleteUploadFetchData = async (src, url, mangaResult) => {
           const image = await handleImageHost(
             `${chapter.src_origin}`,
             `${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`,
-<<<<<<< HEAD
-            imageHost
-=======
             imageHost,
->>>>>>> master
           );
           console.log('image', image);
 
@@ -77,17 +67,10 @@ export const inCompleteUploadFetchData = async (src, url, mangaResult) => {
               imageHost === 'imgBB'
                 ? image.data.url
                 : imageHost === 'cloudFlare'
-<<<<<<< HEAD
-                ? `https://gpfasts.xyz/${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`
-                : imageHost === 'freeImageHost'
-                ? image.image.url
-                : 'null',
-=======
                   ? `https://anasset.xyz/anstrmx/${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`
                   : imageHost === 'freeImageHost'
                     ? image.image.url
                     : 'null',
->>>>>>> master
           };
 
           // if upload is interrupted then we will use this object to delete the images
@@ -114,11 +97,7 @@ export const inCompleteUploadFetchData = async (src, url, mangaResult) => {
         detail_manga,
         chapterIdx,
         'incomplete-upload',
-<<<<<<< HEAD
-        mangaResult
-=======
         mangaResult,
->>>>>>> master
       );
     }
   }
