@@ -18,11 +18,7 @@ export default async function handleInterruptedUpload(
   detail_manga,
   stoppedChapterIdx,
   caller,
-<<<<<<< HEAD
-  mangaResult
-=======
   mangaResult,
->>>>>>> master
 ) {
   console.log('handleInterruptedUpload called');
   console.log('stoppedChapterIdx', stoppedChapterIdx);
@@ -32,11 +28,7 @@ export default async function handleInterruptedUpload(
       detail_manga,
       chapterImages,
       stoppedChapterIdx,
-<<<<<<< HEAD
-      mangaResult
-=======
       mangaResult,
->>>>>>> master
     );
   } else {
     console.log('handleInterruptedUpload else block - only create chapters');
@@ -49,11 +41,7 @@ export default async function handleInterruptedUpload(
         slug: slugify(
           `${mangaResult.slug} chapter ${
             mangaResult.totalChapters - mangaResult.completedChapters - idx
-<<<<<<< HEAD
-          }`
-=======
           }`,
->>>>>>> master
         ),
         data: outerArr.map((x, idx) => ({
           _key: idx.toString(),
@@ -73,11 +61,7 @@ export default async function handleInterruptedUpload(
       };
 
       const result = await sanityClient.create(chapterObj);
-<<<<<<< HEAD
-      // console.log('result', result);
-=======
       console.log('result', result);
->>>>>>> master
     }
     /*
      * Now Update Completed Chapters Count
@@ -89,27 +73,16 @@ export default async function handleInterruptedUpload(
         completedChapters: mangaResult.completedChapters + chapterImages.length,
       })
       .commit();
-<<<<<<< HEAD
-    
-    console.log("manga chapter updated", mangaUpdated);
-  }
-
-=======
 
     console.log('manga chapter updated', mangaUpdated);
   }
->>>>>>> master
 }
 
 const createManga = async (
   detail_manga,
   chapterImages,
   stoppedChapterIdx,
-<<<<<<< HEAD
-  srcUrl
-=======
   srcUrl,
->>>>>>> master
 ) => {
   const {
     title,
@@ -160,11 +133,7 @@ const createManga = async (
     totalChapters: detail_manga.chapters.length,
     srcUrl: srcUrl,
     isMovedToHasura: false,
-<<<<<<< HEAD
-    isPublished: true
-=======
     isPublished: true,
->>>>>>> master
   };
 
   const mangaResult = await sanityClient.create(sanityObj);
@@ -172,11 +141,7 @@ const createManga = async (
     detail_manga,
     mangaResult,
     chapterImages,
-<<<<<<< HEAD
-    stoppedChapterIdx
-=======
     stoppedChapterIdx,
->>>>>>> master
   );
 };
 
@@ -184,11 +149,7 @@ const createChapters = async (
   detail_manga,
   mangaResult,
   chapterImages,
-<<<<<<< HEAD
-  stoppedChapterIdx
-=======
   stoppedChapterIdx,
->>>>>>> master
 ) => {
   /*
    * Create Chapter Now => After Manga is Created
@@ -201,11 +162,7 @@ const createChapters = async (
         url: mangaResult._id,
         chapter_data: chapterImages[idx],
         slug: slugify(
-<<<<<<< HEAD
-          `${mangaResult.slug} chapter ${mangaResult.totalChapters - idx}`
-=======
           `${mangaResult.slug} chapter ${mangaResult.totalChapters - idx}`,
->>>>>>> master
         ),
         last_update: x.last_update,
       };

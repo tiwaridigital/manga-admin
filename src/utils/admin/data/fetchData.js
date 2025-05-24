@@ -99,11 +99,7 @@ export const fetchData = async (src, url, isIncomplete = false) => {
               imageHost === 'imgBB'
                 ? image.data.url
                 : imageHost === 'cloudFlare'
-<<<<<<< HEAD
-                  ? `https://gpfasts.xyz/${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`
-=======
                   ? `https://anasset.xyz/anstrmx/${detail_manga.title}/chapter-${chapterIdx}/${innerChapterIdx}.${fileExtension}`
->>>>>>> master
                   : imageHost === 'freeImageHost'
                     ? image.image.url
                     : 'null',
@@ -176,8 +172,4 @@ const handleImageHost = async (srcImgurl, fileName, imgHost) => {
       console.error('Please Provide Image Host');
       return null;
   }
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> master
