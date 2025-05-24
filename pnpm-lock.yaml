@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-lockfileVersion: '6.0'
-=======
 lockfileVersion: '9.0'
->>>>>>> master
 
 settings:
   autoInstallPeers: true

@@ -61,11 +61,7 @@ const Create = ({ websites }) => {
     const data = await fetchDataServerAction(
       selectedSrc,
       // 'https://asuratoon.com/manga/6849480105-regressing-with-the-kings-power/'
-<<<<<<< HEAD
-      srcUrl
-=======
       srcUrl,
->>>>>>> master
     );
     setManga(data);
 
@@ -99,11 +95,7 @@ const Create = ({ websites }) => {
         return {
           title: x.title,
           slug: slugify(
-<<<<<<< HEAD
-            `${slug} chapter ${data.detail_manga.chapters.length - idx}`
-=======
             `${slug} chapter ${data.detail_manga.chapters.length - idx}`,
->>>>>>> master
           ),
           last_update: x.last_update,
         };
@@ -121,12 +113,8 @@ const Create = ({ websites }) => {
           coverImage,
           genres,
           status,
-<<<<<<< HEAD
-          description: description,
-=======
           description:
             Object.keys(description).length === 0 ? '' : description?.en,
->>>>>>> master
           src: e.value,
           slug,
           chapters,
@@ -155,11 +143,7 @@ const Create = ({ websites }) => {
         slug: slugify(
           `${mangaResult.data.insert_singleMang_one.slug} chapter ${
             data.detail_manga.chapters.length - idx
-<<<<<<< HEAD
-          }`
-=======
           }`,
->>>>>>> master
         ),
         last_update: x.last_update,
       };
