@@ -1,5 +1,5 @@
-import { createMangaFromUrl } from "@/helpers/manga/createMangaFromUrl";
-import { NextResponse } from "next/server";
+import { createMangaFromUrl } from '@/helpers/manga/createMangaFromUrl';
+import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   const { src, url } = await request.json();
@@ -12,6 +12,6 @@ export async function POST(request) {
     return NextResponse.json({ msg: 'success' });
   } catch (err) {
     console.log('error', err);
-    return NextResponse.json({ msg: 'error' });
+    return NextResponse.json({ error: err });
   }
 }
