@@ -8,6 +8,7 @@ import {
 } from '@/utils/imageUpload';
 import axios from 'axios';
 import handleInterruptedUpload from '@/utils/admin/data/handleInterruptedUpload';
+import apiHost from '@/lib/apiHost';
 
 const { Manga, MangaType } = require('manga-lib');
 const FormData = require('form-data');
@@ -47,13 +48,10 @@ export const fetchDataNew = async (src, url, isIncomplete = false) => {
 
     const imagesArr = [];
     // let detail_manga;
-    const { data: manga } = await axios.post(
-      'http://localhost:3000/api/fetch-manga',
-      {
-        providerName: 'MangaDex',
-        mangaId: url,
-      },
-    );
+    const { data: manga } = await axios.post(`${apiHost}/api/fetch-manga`, {
+      providerName: 'MangaDex',
+      mangaId: url,
+    });
 
     let { mangaInfo: detail_manga, chapterDetail: chapterData } = manga;
 

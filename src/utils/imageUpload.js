@@ -1,6 +1,7 @@
 import axios from 'axios';
 import sharp from 'sharp';
 import getImageBuffer from '@/app/_actions/getImageBuffer';
+import apiHost from '@/lib/apiHost';
 
 export const convertImage = async (buffer, format) => {
   try {
@@ -77,7 +78,7 @@ export const cloudFlareR2 = async (fileName, imageUrl, convert) => {
     fileName = fileName.replace(fileExtension, convertFileType);
   }
 
-  const response = await fetch('http://localhost:3000/api/cloudFlareUpload', {
+  const response = await fetch(`${apiHost}/api/cloudFlareUpload`, {
     method: 'POST',
     body: JSON.stringify({
       fileName,

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { getRandomProxy } from '@/utils/proxy'; // adjust path accordingly
 import { MANGA } from '@consumet/extensions';
+import apiHost from '@/lib/apiHost';
 
 export async function POST(req, res) {
   const body = await req.json();
@@ -31,7 +32,7 @@ export async function POST(req, res) {
 
     const imageBuffer = Buffer.from(imageResp.data);
 
-    const response = await fetch('http://localhost:3000/api/cloudFlareUpload', {
+    const response = await fetch(`${apiHost}/api/cloudFlareUpload`, {
       method: 'POST',
       body: JSON.stringify({
         fileName: 'hello-cover.jpg',

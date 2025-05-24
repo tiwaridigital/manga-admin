@@ -3,6 +3,7 @@ import { fetchMangaAction } from '@/actions/fetchMangaAction';
 import { useEffect } from 'react';
 import client from '../../../client';
 import { sanityClient } from '../../../sanityClient';
+import apiHost from '@/lib/apiHost';
 
 const Page = () => {
   const getData = async () => {
@@ -18,7 +19,7 @@ const Page = () => {
     const fetchData = async () => {
       console.log('fetchData called');
       // Client-side
-      const response = await fetch('http://localhost:3000/api/fetch-manga', {
+      const response = await fetch(`${apiHost}/api/fetch-manga`, {
         method: 'POST',
         body: JSON.stringify({
           providerName: 'MangaPill',
