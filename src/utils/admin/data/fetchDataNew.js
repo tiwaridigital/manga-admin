@@ -150,7 +150,7 @@ export const fetchDataNew = async (src, url, isIncomplete = false) => {
 
     // get all chapters data
     const chapterData = await Promise.all(
-      detail_manga.chapters.slice(0, 1).map(async (chapter) => {
+      detail_manga.chapters.map(async (chapter) => {
         const data = await manga.getDataChapter(chapter.url);
         return data;
       }),
