@@ -37,7 +37,7 @@ const Page = () => {
   }, []);
 
   const deleteSanity = async () => {
-    const docs = await sanityClient.fetch(`*[_type == "chapters"]._id`);
+    const docs = await sanityClient.fetch(`*[_type == "incompleteManga"]._id`);
     console.log(`Deleting ${docs.length} documents...`);
 
     for (const id of docs) {
