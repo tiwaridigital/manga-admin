@@ -60,6 +60,7 @@ const SanityChaptersList = ({ chapters, manga }) => {
 
   const handleChapterComplete = async () => {
     console.log('handleChapterComplete', chapters);
+    return;
     const createdManga = await mangaCreator();
     console.log('createdManga created', createdManga);
 
@@ -222,7 +223,7 @@ export const IconWrapper = ({ children, className }) => (
   <div
     className={cn(
       className,
-      'flex items-center rounded-small justify-center w-7 h-7'
+      'flex items-center rounded-small justify-center w-7 h-7',
     )}
   >
     {children}

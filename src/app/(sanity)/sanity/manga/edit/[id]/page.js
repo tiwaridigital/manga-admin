@@ -3,6 +3,7 @@ import Layout from '@/app/layout/Layout';
 import ContentWrapper from '@/components/ContentWrapper';
 import { sanityClient } from '../../../../../../../sanityClient';
 import MangaEditSidebar from '@/components/sanity/incomplete-manga/MangaEditSidebar';
+import { Button } from '@nextui-org/react';
 
 const Page = async ({ params }) => {
   const mangaQuery = `*[_type == "incompleteManga" && _id == "${params.id}"]`;

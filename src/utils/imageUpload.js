@@ -8,7 +8,7 @@ export const convertImage = async (buffer, format) => {
     // convert Image to Specified Image Type Buffer
     return await sharp(buffer)
       [format]({
-        quality: 90,
+        quality: 70,
       })
       .toBuffer();
   } catch (err) {
@@ -69,7 +69,7 @@ export const freeImageHost = async (imageUrl) => {
 };
 
 export const cloudFlareR2 = async (fileName, imageUrl, convert) => {
-  const bufferResult = await getImageBuffer(imageUrl);
+  const bufferResult = await getImageBuffer(imageUrl, false);
   let convertedImageBuffer;
   if (convert) {
     const convertFileType = 'webp';

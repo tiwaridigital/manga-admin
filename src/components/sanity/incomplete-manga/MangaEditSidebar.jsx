@@ -30,6 +30,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { IoCloseSharp } from 'react-icons/io5';
 import { BsArrowRight } from 'react-icons/bs';
 import confetti from 'canvas-confetti';
+import { handleChapterComplete } from '@/actions/handleChapterComplete';
+import { slugify } from '@/utils/helpers';
+import { sanityClient } from '../../../../sanityClient';
+import { listImgInFolder } from '@/utils/cloudflare/listImgInFolder';
 
 const MangaEditSidebar = ({ manga, styles }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -109,8 +113,8 @@ const MangaEditSidebar = ({ manga, styles }) => {
       acceptedFiles.map((file) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
-        })
-      )
+        }),
+      ),
     );
   }, []);
 
@@ -157,10 +161,124 @@ const MangaEditSidebar = ({ manga, styles }) => {
     toastFun('Genres Successfully Updated');
   };
 
+  const handleChpaterResume = async () => {
+    await handleChapterComplete(manga);
+    await createChapters(data.detail_manga, mangaResult, data.chapterImages);
+  };
+
+  const createChapters = async (detail_manga, mangaResult, chapterImages) => {
+    /*
+     * Create Chapter Now => After Manga is Created
+     */
+    let chaptersArr = detail_manga.chapters
+      .slice(mangaResult.completedChapters)
+      .map((x, idx) => {
+        return {
+          title: x.title,
+          url: mangaResult._id,
+          chapter_data: chapterImages[idx],
+          slug: slugify(
+            `${mangaResult.slug} chapter ${
+              mangaResult.totalChapters - mangaResult.completedChapters - idx
+            }`,
+          ),
+          last_update: x.last_update,
+        };
+      });
+
+    let count = 0;
+    for (const x of chaptersArr) {
+      const idx = chaptersArr.indexOf(x); // gets current idx
+      const chapterObj = {
+        _type: 'chapters',
+        slug: slugify(
+          `${mangaResult.title} Chapter ${
+            mangaResult.totalChapters - mangaResult.completedChapters - idx
+          }`,
+        ),
+        data: x.chapter_data.map((xx, idx) => ({
+          _key: idx.toString(),
+          id: idx.toString(),
+          src_origin: xx.src_origin,
+          delete_url: xx.delete_url,
+        })),
+        title: `${mangaResult.title} Chapter ${
+          mangaResult.totalChapters - mangaResult.completedChapters - idx
+        }`,
+        url: {
+          _type: 'reference',
+          _ref: mangaResult._id,
+          _weak: true,
+        },
+        hasNextEp: true,
+      };
+
+      const chapterResult = await sanityClient.create(chapterObj);
+      count++;
+    }
+
+    /*
+     * Now Update Completed Chapters Count
+     * in Manga
+     */
+    const mangaUpdated = await sanityClient
+      .patch(mangaResult._id)
+      .set({
+        completedChapters: mangaResult.completedChapters + chaptersArr.length,
+      })
+      .commit();
+  };
+
+  const getImages = () => {
+    const chapter = 17;
+    listImgInFolder(
+      `Makai Youjo ni Tensei Shita Oji-san wa Heiwa no Tame ni Maou ni Naritai/chapter-${chapter}/`,
+    )
+      .then(async (data) => {
+        console.log(data);
+        const baseURL = 'https://anasset.xyz';
+        const urls = data.map(
+          (key) => `${baseURL}/${encodeURIComponent(key).replace(/%2F/g, '/')}`,
+        );
+
+        console.log(urls);
+        if (!urls) return;
+        await insertChapterInSanity(urls, `chapter-${chapter}`);
+      })
+      .catch(console.error);
+  };
+
+  const insertChapterInSanity = async (urls) => {
+    const data = urls.map((x, idx) => {
+      return {
+        _key: idx.toString(),
+        id: idx.toString(),
+        src_origin: x,
+      };
+    });
+
+    const chapterObj = {
+      _type: 'chapters',
+      title:
+        'Makai Youjo ni Tensei Shita Oji-san wa Heiwa no Tame ni Maou ni Naritai',
+      hasNextEp: true,
+      url: {
+        _ref: 'rISBzUtxSwGhgqYsM0mQV',
+        _type: 'reference',
+        _weak: true,
+      },
+      data,
+    };
+
+    const result = await sanityClient.create(chapterObj);
+    console.log('result', result);
+  };
+
   return (
     <div
       className={`flex flex-col items-center bg-purple-100/50 my-6 rounded-2xl backdrop-blur-sm ${styles}`}
     >
+      <Button onPress={getImages}>Get Images</Button>
       <div className="flex flex-col sm:justify-between px-2 pt-2 pb-4">
         <Snippet
           variant="shadow"
@@ -202,7 +320,8 @@ const MangaEditSidebar = ({ manga, styles }) => {
           endContent={<BsArrowRight />}
           fullWidth
           className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg mb-8"
-          onPress={handleConfetti}
+          // onPress={handleConfetti}
+          onPress={handleChpaterResume}
         >
           Complete Chapters
         </Button>

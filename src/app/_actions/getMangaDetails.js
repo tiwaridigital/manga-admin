@@ -1,11 +1,11 @@
 'use server';
-const { Manga, MangaType } = require('manga-lib');
+import { MANGA } from '@consumet/extensions';
 
-const getMangaDetails = async (mangaUrl) => {
-  const manga = new Manga().build(MangaType.ASURASCANS);
+const getMangaDetails = async (mangaUrl, providerName) => {
+  const manga = new MANGA[providerName]();
 
   // Retrieve the manga details
-  const details = await manga.getDetailManga(mangaUrl);
+  const details = await manga.fetchMangaInfo(mangaUrl);
   console.log('mangaDetails server', details);
   return details;
 };

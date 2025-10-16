@@ -19,11 +19,12 @@ const Page = () => {
     const fetchData = async () => {
       console.log('fetchData called');
       // Client-side
-      const response = await fetch(`${apiHost}/api/fetch-manga`, {
+      const response = await fetch(`http://localhost:3002/api/fetch-manga`, {
         method: 'POST',
         body: JSON.stringify({
-          providerName: 'MangaPill',
-          mangaId: '8824/sentou-to-vampire',
+          // providerName: 'MangaPill',
+          providerName: 'MangaDex',
+          mangaId: 'a77742b1-befd-49a4-bff5-1ad4e6b0ef7b',
         }),
         headers: { 'Content-Type': 'application/json' },
       });

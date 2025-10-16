@@ -1,24 +1,35 @@
 'use server';
+
 import { getRandomProxy } from '@/utils/proxy';
 import axios from 'axios';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 
-const proxy = getRandomProxy();
-const agent = new HttpsProxyAgent(proxy);
-
-export default async function getImageBuffer(url) {
+/**
+ * Fetches image as buffer with optional proxy usage.
+ * @param {string} url - Image URL
+ * @param {boolean} useProxy - Whether to use a proxy (default: false)
+ */
+export default async function getImageBuffer(url, useProxy = true) {
   try {
+    let httpsAgent;
+
+    if (useProxy) {
+      const proxy = getRandomProxy();
+      httpsAgent = new HttpsProxyAgent(proxy);
+      console.log('Using proxy:', proxy);
+    }
+
     const res = await axios({
       method: 'get',
-      url: url,
+      url,
       responseType: 'arraybuffer',
-      httpsAgent: agent,
-      proxy: false,
+      httpsAgent: httpsAgent || undefined,
+      proxy: false, // disable axios's default proxy handling
       timeout: 7000,
     });
 
     return Buffer.from(res.data);
   } catch (error) {
-    console.log('error getting bufferImage', error);
+    console.error('error getting bufferImage', error.message);
   }
 }

@@ -1,10 +1,10 @@
+142.111.48.253:7030:ygyfhhsc:n78xyclqjet0
+31.59.20.176:6754:ygyfhhsc:n78xyclqjet0
+38.170.176.177:5572:ygyfhhsc:n78xyclqjet0
 198.23.239.134:6540:ygyfhhsc:n78xyclqjet0
-207.244.217.165:6712:ygyfhhsc:n78xyclqjet0
+45.38.107.97:6014:ygyfhhsc:n78xyclqjet0
 107.172.163.27:6543:ygyfhhsc:n78xyclqjet0
-161.123.152.115:6360:ygyfhhsc:n78xyclqjet0
-23.94.138.75:6349:ygyfhhsc:n78xyclqjet0
+64.137.96.74:6641:ygyfhhsc:n78xyclqjet0
 216.10.27.159:6837:ygyfhhsc:n78xyclqjet0
-136.0.207.84:6661:ygyfhhsc:n78xyclqjet0
-64.64.118.149:6732:ygyfhhsc:n78xyclqjet0
+142.111.67.146:5611:ygyfhhsc:n78xyclqjet0
 142.147.128.93:6593:ygyfhhsc:n78xyclqjet0
-154.36.110.199:6853:ygyfhhsc:n78xyclqjet0

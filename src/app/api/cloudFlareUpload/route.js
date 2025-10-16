@@ -13,7 +13,7 @@ export async function POST(request) {
     const signedUrl = await getSignedUrl(
       r2,
       new PutObjectCommand({
-        Bucket: 'hola',
+        Bucket: 'nola',
         Key: fileName,
       }),
       { expiresIn: 60 },

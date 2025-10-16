@@ -2,11 +2,18 @@ import { MANGA } from '@consumet/extensions';
 
 export async function POST(req) {
   const body = await req.json();
-  const { providerName, mangaId } = body;
+  const { providerName, mangaId, fetchPopular } = body;
 
   try {
     const manga = new MANGA[providerName]();
+    let popularManga = [];
+
+    if (fetchPopular) {
+      const popularMangaResults = await manga.fetchPopular();
+    }
+
     const mangaInfo = await manga.fetchMangaInfo(mangaId);
+
     const chapterDetailResults = await Promise.allSettled(
       mangaInfo.chapters.map((chapter) => manga.fetchChapterPages(chapter.id)),
     );

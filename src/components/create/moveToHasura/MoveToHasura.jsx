@@ -23,28 +23,48 @@ const MoveToHasura = ({ data }) => {
   };
 
   const createManga = async (sanityManga) => {
-    const originalManga = await getMangaDetails(sanityManga.srcUrl);
+    const originalManga = await getMangaDetails(sanityManga.srcUrl, 'MangaDex');
     const mangaChapters = await sanityClient.fetch(
-      `*[_type == "chapters" && url._ref == "${sanityManga._id}"] | order(_createdAt asc)`
+      `*[_type == "chapters" && url._ref == "${sanityManga._id.replace('drafts.', '')}"] | order(_createdAt asc)`,
     );
+    console.log('mangaChapters', mangaChapters);
 
-    const sortedByTitle = mangaChapters.sort((a, b) => {
-      const titleA = Number(a.title.split(' ').slice(-1));
-      const titleB = Number(b.title.split(' ').slice(-1));
-      if (titleA < titleB) {
-        return 1;
-      } else {
-        return -1;
-      }
-    });
+    // const chaptersNew = await sanityClient.fetch(
+    //   `*[_type == "chapters" && url._ref == "crISBzUtxSwGhgqYsM0mQV"] | order(_createdAt asc)`,
+    // );
+    //
+    // for (const chapter of chaptersNew) {
+    //   const data = chapter.data.map((x) => ({
+    //     ...x,
+    //     src_origin: x.src_origin.replace('anstrmx/', ''),
+    //   }));
+    //   console.log('data', data);
+    //   const result = await sanityClient
+    //     .patch(chapter._id) // specify the document ID
+    //     .set({
+    //       data,
+    //     })
+    //     .commit(); // apply the patch
+    //   console.log('result', result);
+    // }
 
-    const chapterImages = sortedByTitle.map((x) =>
+    // const sortedByTitle = mangaChapters.sort((a, b) => {
+    //   const titleA = Number(a.title.split(' ').slice(-1));
+    //   const titleB = Number(b.title.split(' ').slice(-1));
+    //   if (titleA < titleB) {
+    //     return 1;
+    //   } else {
+    //     return -1;
+    //   }
+    // });
+
+    const chapterImages = mangaChapters.map((x) =>
       x.data.map((y) => {
         return {
           id: y.id,
           src_origin: y.src_origin,
         };
-      })
+      }),
     );
 
     const {
@@ -76,6 +96,29 @@ const MoveToHasura = ({ data }) => {
       };
     });
 
+    console.log('obj', {
+      title,
+      alternativeName: alterNativeName ?? '',
+      artist: artist ?? '',
+      author: author ?? '',
+      coverImage: coverImage ?? '',
+      genres,
+      status,
+      description,
+      src: 'asuratoon',
+      slug,
+      chapters,
+      rating,
+      dates: dates ?? {},
+    });
+
+    console.log('debug', {
+      originalManga,
+      chapterImages,
+      // mangaResult,
+      sanityManga,
+    });
+
     const mangaResult = await client.mutate({
       mutation: SINGLE_MANGA_MUTATE,
       variables: {
@@ -86,7 +129,7 @@ const MoveToHasura = ({ data }) => {
         coverImage,
         genres,
         status,
-        description: description,
+        description: description.en ?? description.ja ?? '',
         src: 'asuratoon',
         slug,
         chapters,
@@ -99,7 +142,7 @@ const MoveToHasura = ({ data }) => {
       originalManga,
       chapterImages,
       mangaResult,
-      sanityManga
+      sanityManga,
     );
   };
 
@@ -107,7 +150,7 @@ const MoveToHasura = ({ data }) => {
     originalManga,
     chapterImages,
     mangaResult,
-    sanityManga
+    sanityManga,
   ) => {
     console.log('createChapters called', originalManga);
     /*
@@ -122,7 +165,7 @@ const MoveToHasura = ({ data }) => {
         slug: slugify(
           `${mangaResult.data.insert_singleMang_one.slug} chapter ${
             originalManga.chapters.length - idx
-          }`
+          }`,
         ),
         last_update: x.last_update,
       };

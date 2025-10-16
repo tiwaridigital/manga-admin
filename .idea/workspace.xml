@@ -5,19 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6ba40d38-6445-4928-a6be-adfa2d6e7e87" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/constants/websites.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/actions/handleChapterComplete.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utils/cloudflare/listImgInFolder.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/(create)/create/manual-create-sanity/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(create)/create/manual-create-sanity/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/(create)/create/page.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(create)/create/page.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/create/IncompleteUpload.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/create/IncompleteUpload.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/admin/data/fetchData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/admin/data/fetchData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/admin/data/handleInterruptedUpload.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/admin/data/handleInterruptedUpload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proxies.txt" beforeDir="false" afterPath="$PROJECT_DIR$/proxies.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/(sanity)/sanity/manga/edit/[id]/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/(sanity)/sanity/manga/edit/[id]/page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/_actions/getImageBuffer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_actions/getImageBuffer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/_actions/getMangaDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/_actions/getMangaDetails.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/cloudFlareUpload/route.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/cloudFlareUpload/route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/api/fetch-manga/route.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/api/fetch-manga/route.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/test/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/test/page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/create/moveToHasura/MoveToHasura.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/create/moveToHasura/MoveToHasura.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sanity/chapters/SanityChaptersList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sanity/chapters/SanityChaptersList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/sanity/incomplete-manga/MangaEditSidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/sanity/incomplete-manga/MangaEditSidebar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/r2.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/r2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/imageUpload.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/imageUpload.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,32 +39,65 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2hXxqwVAxvNoJ3HaseS0WUMyOou" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "pnpm",
-    "prettierjs.PrettierConfiguration.Package": "C:\\Program Files\\nodejs\\node_modules\\prettier",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2023.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;JavaScript Debug.localhost:3000.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;js.debugger.nextJs.config.created.client&quot;: &quot;true&quot;,
+    &quot;js.debugger.nextJs.config.created.server&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;D:\\Personal Projects\\Manga\\manga-admin\\node_modules\\prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2023.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RunManager" selected="JavaScript Debug.localhost:3000">
+    <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
+      <method v="2" />
+    </configuration>
+    <configuration name="localhost:3000" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:3000">
+      <method v="2" />
+    </configuration>
+    <configuration name="Next.js: server-side" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.localhost:3000" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17011.90" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-WS-252.26830.93" />
       </set>
     </attachedChunks>
   </component>
@@ -77,6 +114,11 @@
       <workItem from="1717755284955" duration="2557000" />
       <workItem from="1717785946240" duration="1658000" />
       <workItem from="1717865944426" duration="1994000" />
+      <workItem from="1752505751044" duration="504000" />
+      <workItem from="1760248436046" duration="6844000" />
+      <workItem from="1760286881527" duration="6342000" />
+      <workItem from="1760353637016" duration="153000" />
+      <workItem from="1760353802998" duration="4985000" />
     </task>
     <servers />
   </component>
