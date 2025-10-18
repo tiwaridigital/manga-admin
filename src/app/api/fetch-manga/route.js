@@ -14,6 +14,7 @@ export async function POST(req) {
 
     const mangaInfo = await manga.fetchMangaInfo(mangaId);
     let chapterDetail = {};
+    let chapterDetailResults = [];
 
     if (fetchChapters) {
       chapterDetailResults = await Promise.allSettled(
