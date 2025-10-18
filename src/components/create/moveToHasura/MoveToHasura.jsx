@@ -7,7 +7,7 @@ import SINGLE_MANGA_MUTATE from '@/graphql/mutations/SingleMangaMutation.gql';
 import SINGLE_CHAPTER_MUTATE from '@/graphql/mutations/SingleChapterMutation.gql';
 import COMPLETE_CHAPTER_MUTATION from '@/graphql/mutations/chapter_tracker/completeChapterMutation.gql';
 import INCOMPLETE_CHAPTER_MUTATION from '@/graphql/mutations/chapter_tracker/inCompleteChapterMutation.gql';
-import { slugify } from '@/utils/helpers';
+import { getAutoTitle, slugify } from '@/utils/helpers';
 import client from '../../../../client';
 import { sanityClient } from '../../../../sanityClient';
 
@@ -67,9 +67,10 @@ const MoveToHasura = ({ data }) => {
       }),
     );
 
-    const {
+    let {
       title,
       alterNativeName,
+      altTitles,
       artist,
       author,
       coverImage,
@@ -79,6 +80,7 @@ const MoveToHasura = ({ data }) => {
       uploadedDate,
       updatedDate,
     } = originalManga;
+    title = getAutoTitle(altTitles || title || '');
     const slug = slugify(title);
     const genres = originalManga.genres.map((x) => x.name);
     const dates = {
@@ -91,7 +93,7 @@ const MoveToHasura = ({ data }) => {
     let chapters = originalManga.chapters.map((x, idx) => {
       return {
         title: x.title,
-        slug: slugify(`${slug} chapter ${originalManga.chapters.length - idx}`),
+        slug: slugify(`${slug} chapter ${idx + 1}`),
         last_update: x.last_update,
       };
     });
@@ -160,27 +162,39 @@ const MoveToHasura = ({ data }) => {
       return {
         title: x.title,
         url: mangaResult.data.insert_singleMang_one.id,
-        // chapter_data: data.chapterData[idx],
         chapter_data: chapterImages[idx],
         slug: slugify(
-          `${mangaResult.data.insert_singleMang_one.slug} chapter ${
-            originalManga.chapters.length - idx
-          }`,
+          `${mangaResult.data.insert_singleMang_one.slug} chapter ${idx + 1}`,
         ),
         last_update: x.last_update,
       };
     });
 
+    console.log('chaptersArr', chaptersArr);
+
     let count = 0;
     for (const x of chaptersArr) {
       const idx = chaptersArr.indexOf(x); // gets current idx
       console.log('idx', idx);
+      const sanitizedData = chapterImages[idx].map(({ _key, ...rest }) => rest);
+      console.log('sanitizedData', sanitizedData, Array.isArray(sanitizedData));
+      console.log('obj', {
+        title: x.title,
+        url: x.url,
+        data: sanitizedData,
+        slug: x.slug,
+        hasNextEp:
+          idx === 0
+            ? false
+            : true /* Inserted false for 0th idx => because chaptersArr is reversed in descending order */,
+        totalEpisodes: chaptersArr.length,
+      });
       const chapterResult = await client.mutate({
         mutation: SINGLE_CHAPTER_MUTATE,
         variables: {
           title: x.title,
           url: x.url,
-          data: x.chapter_data,
+          data: sanitizedData,
           slug: x.slug,
           hasNextEp:
             idx === 0
@@ -190,6 +204,7 @@ const MoveToHasura = ({ data }) => {
         },
       });
       count++;
+      console.log('chapterResult', chapterResult);
     }
 
     /*

@@ -6,7 +6,7 @@ import ContentWrapper from '@/components/ContentWrapper';
 
 const Page = async () => {
   const mangas = await sanityClient.fetch(
-    `*[_type == "incompleteManga" && completedChapters == totalChapters && !isMovedToHasura]`
+    `*[_type == "incompleteManga" && !isMovedToHasura]`
   );
   console.log('mangas', mangas);
   return (
