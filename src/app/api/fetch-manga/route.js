@@ -2,7 +2,7 @@ import { MANGA } from '@consumet/extensions';
 
 export async function POST(req) {
   const body = await req.json();
-  const { providerName, mangaId, fetchPopular } = body;
+  const { providerName, mangaId, fetchPopular, fetchChapters = true } = body;
 
   try {
     const manga = new MANGA[providerName]();
@@ -13,14 +13,19 @@ export async function POST(req) {
     }
 
     const mangaInfo = await manga.fetchMangaInfo(mangaId);
+    let chapterDetail = {};
 
-    const chapterDetailResults = await Promise.allSettled(
-      mangaInfo.chapters.map((chapter) => manga.fetchChapterPages(chapter.id)),
-    );
+    if (fetchChapters) {
+      chapterDetailResults = await Promise.allSettled(
+        mangaInfo.chapters.map((chapter) =>
+          manga.fetchChapterPages(chapter.id),
+        ),
+      );
 
-    const chapterDetail = chapterDetailResults.map((result) =>
-      result.status === 'fulfilled' ? result.value : [],
-    );
+      chapterDetail = chapterDetailResults.map((result) =>
+        result.status === 'fulfilled' ? result.value : [],
+      );
+    }
 
     return Response.json({ mangaInfo, chapterDetail });
   } catch (error) {

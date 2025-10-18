@@ -230,19 +230,32 @@ const MangaEditSidebar = ({ manga, styles }) => {
   };
 
   const getImages = () => {
-    const chapter = 17;
+    const chapter = 0;
     listImgInFolder(
-      `Makai Youjo ni Tensei Shita Oji-san wa Heiwa no Tame ni Maou ni Naritai/chapter-${chapter}/`,
+      `"Sono Hen no Kusa demo Kuttoke" to Tsuihou Sareta Munou Skill [Shokubutsugui] Mochi Tenseisha, Elf no Sato de Maboroshi no Shokubutsu o Tabete Musou Suru/chapter-${chapter}/`,
     )
       .then(async (data) => {
-        console.log(data);
+        if (!data || !Array.isArray(data)) {
+          console.error('No data returned from listImgInFolder');
+          return;
+        }
+
+        // Sort by numeric order (e.g., 0.webp, 1.webp, 2.webp ...)
+        const sorted = data.sort((a, b) => {
+          const getNum = (str) => {
+            const match = str.match(/(\d+)(?=\.\w+$)/);
+            return match ? parseInt(match[1], 10) : 0;
+          };
+          return getNum(a) - getNum(b);
+        });
+
         const baseURL = 'https://anasset.xyz';
-        const urls = data.map(
+        const urls = sorted.map(
           (key) => `${baseURL}/${encodeURIComponent(key).replace(/%2F/g, '/')}`,
         );
 
-        console.log(urls);
-        if (!urls) return;
+        console.log('Sorted URLs:', urls);
+
         await insertChapterInSanity(urls, `chapter-${chapter}`);
       })
       .catch(console.error);
@@ -278,7 +291,7 @@ const MangaEditSidebar = ({ manga, styles }) => {
     <div
       className={`flex flex-col items-center bg-purple-100/50 my-6 rounded-2xl backdrop-blur-sm ${styles}`}
     >
-      <Button onPress={getImages}>Get Images</Button>
+      <Button onPress={getImages}>Get Images From R2</Button>
       <div className="flex flex-col sm:justify-between px-2 pt-2 pb-4">
         <Snippet
           variant="shadow"

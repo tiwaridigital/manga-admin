@@ -54,6 +54,11 @@ const createItems = [
     link: '/create/manual-create-sanity',
     icon: <IoCloudUploadOutline size={20} />,
   },
+  {
+    title: 'Manually Create Manga in Sanity',
+    link: '/create/manual-create-manga-sanity',
+    icon: <IoCloudUploadOutline size={20} />,
+  },
 ];
 
 export default function App() {
